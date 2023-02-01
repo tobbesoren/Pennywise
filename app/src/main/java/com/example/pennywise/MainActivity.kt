@@ -1,17 +1,17 @@
 package com.example.pennywise
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+
+//These are used when creating test data:
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private val auth = Firebase.auth
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -47,23 +47,27 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-        val transaction = hashMapOf(
-            "amount" to 1234,
-            "date" to DateTimeFormatter
-                .ofPattern("yyyy-MM-dd HH:mm:ss")
-                .withZone(ZoneOffset.UTC)
-                .format(Instant.now()),
-            "category" to "vices"
+        //Adding test data to firebase firestore
+        /*val transaction = Transaction(
+            1000,
+            DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss")
+            .withZone(ZoneOffset.UTC)
+            .format(Instant.now()),
+            "default"
         )
 
-        /*db.collection("testing")
+        db.collection(auth.uid.toString())
             .add(transaction)
             .addOnSuccessListener { documentReference ->
-            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+            Log.d("!!!!", "DocumentSnapshot added with ID: ${documentReference.id}")
         }*/
     }
 
+    /**
+     * Called when Create User Button is pressed. Creates a new user if e-mail and
+     * password is entered - if not, returns with a Toast.
+     */
     private fun createUser() {
         val email = emailEditText.text.toString()
         val password = passwordEditText.text.toString()
