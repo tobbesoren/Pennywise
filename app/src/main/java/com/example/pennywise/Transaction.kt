@@ -1,3 +1,3 @@
 package com.example.pennywise
 
-data class Transactions()
+data class Transaction(val amount: Int, val date: String, val category: String)
