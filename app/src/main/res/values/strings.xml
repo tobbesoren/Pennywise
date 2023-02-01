@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">Pennywise</string>
+    <string name="app_name">PennyWise</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="create_user">Create User</string>
+    <string name="enter_email_and_password">Enter e-mail and password</string>
+    <string name="user_created">User created</string>
+    <string name="user_not_created">User not created</string>
+    <string name="to_log_in">Please enter e-mail and password to log in</string>
+    <string name="user_logged_in">User logged in</string>
+    <string name="user_not_logged_in">User not logged in</string>
 </resources>
