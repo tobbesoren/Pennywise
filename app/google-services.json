@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "912731476358",
+    "project_id": "pennywise-4f242",
+    "storage_bucket": "pennywise-4f242.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912731476358:android:a932b346e3ba482a2e9c07",
+        "android_client_info": {
+          "package_name": "com.example.pennywise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912731476358-6o260hlid8pun70o5v7kiel3v00s1urp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX-omnTgHRSQG-xyu39nkGDxtK62btRKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912731476358-6o260hlid8pun70o5v7kiel3v00s1urp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
