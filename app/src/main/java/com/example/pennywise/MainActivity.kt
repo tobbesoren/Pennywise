@@ -1,14 +1,14 @@
 package com.example.pennywise
 
-import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         val db = Firebase.firestore
         emailEditText = findViewById(R.id.editTextEmail)
         passwordEditText = findViewById(R.id.editTextPassword)
+
+        checkIfLoggedIn()
 
         //Lets set up the buttons! Log in...
         val logInButton = findViewById<Button>(R.id.buttonLogIn)
@@ -88,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                         getString(R.string.user_created),
                         Toast.LENGTH_SHORT).show()
                     Log.d("!!!!", "create user successful")
-                    //goToPlaces()
+                    goToOverView()
                 } else {
                     Toast.makeText(this, "${getString(
                         R.string.user_not_created)} ${task.exception.toString()}",
@@ -118,9 +120,10 @@ class MainActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
-                    Toast.makeText(this, getString(R.string.user_logged_in), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.user_logged_in),
+                        Toast.LENGTH_SHORT).show()
                     Log.d("!!!!", "User logged in")
-                    //goToPlaces()
+                    goToOverView()
                 } else {
                     Toast.makeText(this, "${getString(
                         R.string.user_not_logged_in)} ${task.exception.toString()}"
@@ -131,4 +134,21 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+     *Starts OverView.
+     */
+    private fun goToOverView() {
+        val intent = Intent(this, OverView::class.java)
+        startActivity(intent)
+    }
+
+
+    /**
+     *If a user is logged in, move directly to OverView.
+     */
+    private fun checkIfLoggedIn() {
+        if(auth.currentUser != null) {
+            goToOverView()
+        }
+    }
 }
