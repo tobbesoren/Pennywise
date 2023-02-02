@@ -1,17 +1,17 @@
 package com.example.pennywise
 
-import android.content.ContentValues.TAG
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+
+//These are used when creating test data:
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private val auth = Firebase.auth
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         val db = Firebase.firestore
         emailEditText = findViewById(R.id.editTextEmail)
         passwordEditText = findViewById(R.id.editTextPassword)
+
+        checkIfLoggedIn()
 
         //Lets set up the buttons! Log in...
         val logInButton = findViewById<Button>(R.id.buttonLogIn)
@@ -45,23 +47,27 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-        val transaction = hashMapOf(
-            "amount" to 1234,
-            "date" to DateTimeFormatter
-                .ofPattern("yyyy-MM-dd HH:mm:ss")
-                .withZone(ZoneOffset.UTC)
-                .format(Instant.now()),
-            "category" to "vices"
+        //Adding test data to firebase firestore
+        /*val transaction = Transaction(
+            1000,
+            DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss")
+            .withZone(ZoneOffset.UTC)
+            .format(Instant.now()),
+            "default"
         )
 
-        /*db.collection("testing")
+        db.collection(auth.uid.toString())
             .add(transaction)
             .addOnSuccessListener { documentReference ->
-            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+            Log.d("!!!!", "DocumentSnapshot added with ID: ${documentReference.id}")
         }*/
     }
 
+    /**
+     * Called when Create User Button is pressed. Creates a new user if e-mail and
+     * password is entered - if not, returns with a Toast.
+     */
     private fun createUser() {
         val email = emailEditText.text.toString()
         val password = passwordEditText.text.toString()
@@ -88,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                         getString(R.string.user_created),
                         Toast.LENGTH_SHORT).show()
                     Log.d("!!!!", "create user successful")
-                    //goToPlaces()
+                    goToOverView()
                 } else {
                     Toast.makeText(this, "${getString(
                         R.string.user_not_created)} ${task.exception.toString()}",
@@ -118,9 +124,10 @@ class MainActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
-                    Toast.makeText(this, getString(R.string.user_logged_in), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.user_logged_in),
+                        Toast.LENGTH_SHORT).show()
                     Log.d("!!!!", "User logged in")
-                    //goToPlaces()
+                    goToOverView()
                 } else {
                     Toast.makeText(this, "${getString(
                         R.string.user_not_logged_in)} ${task.exception.toString()}"
@@ -131,4 +138,21 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+     *Starts OverView.
+     */
+    private fun goToOverView() {
+        val intent = Intent(this, OverView::class.java)
+        startActivity(intent)
+    }
+
+
+    /**
+     *If a user is logged in, move directly to OverView.
+     */
+    private fun checkIfLoggedIn() {
+        if(auth.currentUser != null) {
+            goToOverView()
+        }
+    }
 }
