@@ -2,82 +2,89 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="409dp"
-    android:layout_height="227dp"
+    android:layout_width="410dp"
+    android:layout_height="wrap_content"
     android:background="#C5DDD9">
 
-    <CheckBox
-        android:id="@+id/amusementCheckBox"
+    <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Amusement"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <CheckBox
-        android:id="@+id/householdCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Household"
-        app:layout_constraintStart_toStartOf="@+id/amusementCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/amusementCheckBox" />
+        <RadioButton
+            android:id="@+id/radio_Amusement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amusement" />
 
-    <CheckBox
-        android:id="@+id/transportationCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Tranportation"
-        app:layout_constraintStart_toStartOf="@+id/householdCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/householdCheckBox" />
+        <RadioButton
+            android:id="@+id/radio_Household"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Household" />
 
-    <CheckBox
-        android:id="@+id/diningCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="125dp"
-        android:text="Dining"
-        app:layout_constraintStart_toStartOf="@+id/amusementCheckBox"
-        app:layout_constraintTop_toTopOf="@+id/amusementCheckBox" />
+        <RadioButton
+            android:id="@+id/radio_Transportation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transportation" />
 
-    <CheckBox
-        android:id="@+id/hcWellCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Healthcare / Wellness"
-        app:layout_constraintStart_toStartOf="@+id/diningCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/diningCheckBox" />
+        <RadioButton
+            android:id="@+id/radio_Dining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dining" />
 
-    <CheckBox
-        android:id="@+id/groceriesCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Groceries"
-        app:layout_constraintStart_toStartOf="@+id/hcWellCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/hcWellCheckBox" />
+        <RadioButton
+            android:id="@+id/radio_Hc_WellN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Healthcare / Wellness" />
 
-    <CheckBox
-        android:id="@+id/otherCheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="125dp"
-        android:text="Other"
-        app:layout_constraintStart_toStartOf="@+id/diningCheckBox"
-        app:layout_constraintTop_toTopOf="@+id/diningCheckBox" />
+        <RadioButton
+            android:id="@+id/radio_Groceries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Groceries" />
+
+        <RadioButton
+            android:id="@+id/radio_Other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            android:textColor="#FCA311"
+            android:checked="true"
+            />
+
+    </RadioGroup>
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/saveImageButton"
         android:layout_width="68dp"
         android:layout_height="60dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#98C1D8"
-        app:layout_constraintStart_toStartOf="@+id/otherCheckBox"
-        app:layout_constraintTop_toBottomOf="@+id/otherCheckBox"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumber"
         app:srcCompat="@drawable/baseline_save_24" />
+
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="Amount :"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
