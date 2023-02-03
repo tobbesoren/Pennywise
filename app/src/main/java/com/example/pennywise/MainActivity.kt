@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         /*val transaction = Transaction(
             1000,
             DateTimeFormatter
-            .ofPattern("yyyy-MM-dd HH:mm:ss")
+            .ofPattern("2")
             .withZone(ZoneOffset.UTC)
             .format(Instant.now()),
             "default"
