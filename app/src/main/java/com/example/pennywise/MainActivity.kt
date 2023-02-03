@@ -15,7 +15,7 @@ import com.google.firebase.ktx.Firebase
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-
+val db = Firebase.firestore
 class MainActivity : AppCompatActivity() {
 
     private lateinit var emailEditText : EditText
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val db = Firebase.firestore
+//        val db = Firebase.firestore
         emailEditText = findViewById(R.id.editTextEmail)
         passwordEditText = findViewById(R.id.editTextPassword)
 

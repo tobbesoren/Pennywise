@@ -10,7 +10,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class OverView : AppCompatActivity() {
 
-    private lateinit var expenseEditText: EditText
     private lateinit var expensePresentView: TextView
 
     @SuppressLint("MissingInflatedId")
@@ -18,24 +17,16 @@ class OverView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_over_view)
 
-        expenseEditText = findViewById(R.id.expenseEditText)
         expensePresentView = findViewById(R.id.expenseTextView)
-
-
-
-        // expenseEditText functionality
 
         // scanExpenseFAB functionality
 
         // addExpenseFAB functionality
         val addExpenseFAB = findViewById<FloatingActionButton>(R.id.addExpenseFAB)
         addExpenseFAB.setOnClickListener{
-//            val expenseAmount = expenseEditText.toString().toIntOrNull()
-//            intent.putExtra("amount", expenseAmount)
+
             showAddExpenseFragment()
         }
-
-
     }
     private fun showAddExpenseFragment() {
         val addExpenseFragment = supportFragmentManager.findFragmentByTag("addExpenseFragment")
