@@ -12,10 +12,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 //These are used when creating test data:
-import java.time.Instant
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
+
 val db = Firebase.firestore
+val uid = Firebase.auth.uid.toString()
 class MainActivity : AppCompatActivity() {
 
     private lateinit var emailEditText : EditText
@@ -151,7 +150,7 @@ class MainActivity : AppCompatActivity() {
     private fun goToOverView() {
         val intent = Intent(this, OverView::class.java)
         //Load data
-        DataHandler.loadData(auth.uid.toString())
+        DataHandler.loadAllData(auth.uid.toString())
         startActivity(intent)
     }
 
