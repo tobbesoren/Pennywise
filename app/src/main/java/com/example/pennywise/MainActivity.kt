@@ -11,10 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-//These are used when creating test data:
 
-val db = Firebase.firestore
-val uid = Firebase.auth.uid.toString()
 class MainActivity : AppCompatActivity() {
 
     private lateinit var emailEditText : EditText
@@ -27,16 +24,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val db = Firebase.firestore
+
         emailEditText = findViewById(R.id.editTextEmail)
         passwordEditText = findViewById(R.id.editTextPassword)
-
-        //Testing
-//        val transaction = Transaction(
-//            777,
-//            "test")
-
-//        DataHandler.addTransaction(auth.uid.toString(), transaction)
 
         checkIfLoggedIn()
 
@@ -51,23 +41,6 @@ class MainActivity : AppCompatActivity() {
         createUserButton.setOnClickListener {
             createUser()
         }
-
-
-        //Adding test data to firebase firestore
-        /*val transaction = Transaction(
-            1000,
-            DateTimeFormatter
-            .ofPattern("2")
-            .withZone(ZoneOffset.UTC)
-            .format(Instant.now()),
-            "default"
-        )
-
-        db.collection(auth.uid.toString())
-            .add(transaction)
-            .addOnSuccessListener { documentReference ->
-            Log.d("!!!!", "DocumentSnapshot added with ID: ${documentReference.id}")
-        }*/
     }
 
     /**
@@ -149,8 +122,6 @@ class MainActivity : AppCompatActivity() {
      */
     private fun goToOverView() {
         val intent = Intent(this, OverView::class.java)
-        //Load data
-        DataHandler.loadAllData(auth.uid.toString())
         startActivity(intent)
     }
 

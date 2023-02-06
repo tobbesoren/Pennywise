@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -16,6 +17,8 @@ import com.google.firebase.ktx.Firebase
 class OverView : AppCompatActivity() {
 
     private lateinit var expensePresentView: TextView
+
+    private val uid = Firebase.auth.uid.toString()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,34 +55,16 @@ class OverView : AppCompatActivity() {
             transaction.commit()
         }
     }
-    fun loadData(userID: String) {
+    private fun loadData(userID: String) {
         Firebase.firestore.collection("users/${userID}/transactions")
             .get()
             .addOnSuccessListener { documentSnapShot ->
-                makeListAndBalance(documentSnapShot)
-                expensePresentView.text = DataHandler.balance.toString()
-                logData()
+                DataHandler.makeListAndBalance(documentSnapShot)
+                expensePresentView.text = "${DataHandler.balance.kronor} kr ${DataHandler.balance.ore} öre"
+                DataHandler.logData()
             }.addOnFailureListener { exception ->
                 Log.d("!!!!", exception.toString())
             }
     }
-    private fun makeListAndBalance(documentSnapShot: QuerySnapshot) {
-        DataHandler.itemsToView.clear()
-        DataHandler.balance = 0
-        for (document in documentSnapShot.documents) {
-            val item = document.toObject<Transaction>()
-            if (item != null) {
 
-                DataHandler.itemsToView.add(item)
-                DataHandler.balance += item.amount
-            }
-        }
-    }
-
-    private fun logData() {
-        for (item in DataHandler.itemsToView) {
-            Log.d("!!!!", item.toString())
-        }
-        Log.d("!!!!", DataHandler.balance.toString())
-    }
 }
