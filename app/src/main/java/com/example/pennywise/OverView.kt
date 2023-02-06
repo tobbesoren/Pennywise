@@ -1,6 +1,7 @@
 package com.example.pennywise
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -33,12 +34,19 @@ class OverView : AppCompatActivity() {
 
         // scanExpenseFAB functionality
 
-        // addExpenseFAB functionality
-        val addExpenseFAB = findViewById<FloatingActionButton>(R.id.addExpenseFAB)
-        addExpenseFAB.setOnClickListener{
+        // addExpenseFAB
 
-            showAddExpenseFragment()
+        val  addExpenseFAB = findViewById<FloatingActionButton>(R.id.addExpenseFAB)
+        addExpenseFAB.setOnClickListener {
+            val intent = Intent(this, AddTransactionActivity::class.java)
+            startActivity(intent)
         }
+
+//        val addExpenseFAB = findViewById<FloatingActionButton>(R.id.addExpenseFAB)
+//        addExpenseFAB.setOnClickListener{
+//
+//            showAddExpenseFragment()
+//        }
     }
     private fun showAddExpenseFragment() {
         val addExpenseFragment = supportFragmentManager.findFragmentByTag("addExpenseFragment")
