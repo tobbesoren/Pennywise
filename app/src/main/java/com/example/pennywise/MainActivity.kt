@@ -32,6 +32,13 @@ class MainActivity : AppCompatActivity() {
         emailEditText = findViewById(R.id.editTextEmail)
         passwordEditText = findViewById(R.id.editTextPassword)
 
+        //Testing
+//        val transaction = Transaction(
+//            777,
+//            "test")
+
+//        DataHandler.addTransaction(auth.uid.toString(), transaction)
+
         checkIfLoggedIn()
 
         //Lets set up the buttons! Log in...
@@ -143,6 +150,8 @@ class MainActivity : AppCompatActivity() {
      */
     private fun goToOverView() {
         val intent = Intent(this, OverView::class.java)
+        //Load data
+        DataHandler.loadData(auth.uid.toString())
         startActivity(intent)
     }
 
