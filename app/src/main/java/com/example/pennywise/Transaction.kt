@@ -1,7 +1,13 @@
 package com.example.pennywise
 
-data class Transaction (val amount: Int,
-                        //I changed "date" to "timeStamp", since we save the time as well as
-                        // the date. /Tobbe
-                        val timeStamp: String, //Format: yyyy-MM-dd HH:mm:ss
-                        val category: String)
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
+data class Transaction (val amount: Int = 0,
+                        val category: String = "",
+                        //Auto-timestamp
+                        val timeStamp: String = DateTimeFormatter
+                            .ofPattern("yyyy-MM-dd HH:mm:ss")
+                            .withZone(ZoneOffset.systemDefault())
+                            .format(Instant.now()))
