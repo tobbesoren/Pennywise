@@ -10,6 +10,8 @@ import android.widget.ImageButton
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.sql.Timestamp
 import java.time.Instant
 
@@ -17,6 +19,8 @@ class AddExpenseFragment() : Fragment() {
 
     private lateinit var amountEditText: EditText
     private lateinit var radioGroup: RadioGroup
+
+    private val uid = Firebase.auth.uid.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater,

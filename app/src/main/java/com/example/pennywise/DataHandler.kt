@@ -9,7 +9,7 @@ import com.google.firebase.ktx.Firebase
 
 object DataHandler {
     val itemsToView = mutableListOf<Transaction>()
-    var balance: Int = 0
+    var balance = Balance()
 
 
     fun addTransaction(userID: String,transaction: Transaction) {
@@ -39,20 +39,21 @@ object DataHandler {
     }
 
 
-
-    private fun makeListAndBalance(documentSnapShot: QuerySnapshot) {
+    fun makeListAndBalance(documentSnapShot: QuerySnapshot) {
         itemsToView.clear()
-        balance = 0
+        var sum = 0
         for (document in documentSnapShot.documents) {
             val item = document.toObject<Transaction>()
             if (item != null) {
                 itemsToView.add(item)
-                balance += item.amount
+                sum += item.amount
             }
         }
+        balance.kronor = sum / 100
+        balance.ore = sum % 100
     }
 
-    private fun logData() {
+    fun logData() {
         for (item in itemsToView) {
             Log.d("!!!!", item.toString())
         }
