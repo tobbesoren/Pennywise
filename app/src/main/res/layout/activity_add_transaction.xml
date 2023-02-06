@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/radioGroup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#C5DDD9"
+    tools:context=".AddTransactionActivity">
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/returnIB">
+
+        <RadioButton
+            android:id="@+id/radio_Amusement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Amusement" />
+
+        <RadioButton
+            android:id="@+id/radio_Household"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Household" />
+
+        <RadioButton
+            android:id="@+id/radio_Transportation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transportation" />
+
+        <RadioButton
+            android:id="@+id/radio_Dining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dining" />
+
+        <RadioButton
+            android:id="@+id/radio_Hc_WellN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Healthcare / Wellness" />
+
+        <RadioButton
+            android:id="@+id/radio_Groceries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Groceries" />
+
+        <RadioButton
+            android:id="@+id/radio_Other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Other"
+            android:textColor="#FCA311" />
+    </RadioGroup>
+
+    <ImageButton
+        android:id="@+id/returnIB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#C5DDD9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+
+    <EditText
+        android:id="@+id/amountEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:fontFamily="@font/roboto"
+        android:hint="Amount :"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amountEditText"
+        app:srcCompat="@drawable/baseline_save_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
