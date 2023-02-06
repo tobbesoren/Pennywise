@@ -35,13 +35,12 @@ class AddExpenseFragment() : Fragment() {
         saveButton.setOnClickListener {
             amount = amountEditText.text.toString().toInt()
             val category = checkButton(view)
-            val date = Timestamp.from(Instant.now())
-            val transaction = Transaction(amount,date.toString(),category)
+            val transaction = Transaction(amount,category)
 
-            db.collection("Transaction").add(transaction)
+//            db.collection("Transaction").add(transaction)
+            DataHandler.addTransaction(uid,transaction)
 
             Log.d("!!!", category)
-            Log.d("!!!", date.toString())
             Log.d("!!!", amount.toString())
 
         }

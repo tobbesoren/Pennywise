@@ -27,7 +27,7 @@ object DataHandler {
 
 
 
-    fun loadData(userID: String) {
+    fun loadAllData(userID: String) {
         Firebase.firestore.collection("users/${userID}/transactions")
             .get()
             .addOnSuccessListener { documentSnapShot ->
@@ -42,6 +42,7 @@ object DataHandler {
 
     private fun makeListAndBalance(documentSnapShot: QuerySnapshot) {
         itemsToView.clear()
+        balance = 0
         for (document in documentSnapShot.documents) {
             val item = document.toObject<Transaction>()
             if (item != null) {
