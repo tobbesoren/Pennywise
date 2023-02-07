@@ -5,14 +5,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.EditText
+import android.widget.Button
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 class OverView : AppCompatActivity() {
@@ -30,36 +27,39 @@ class OverView : AppCompatActivity() {
 
         loadData(uid)
 
-
-
         // scanExpenseFAB functionality
+        val scanExpenseFAB = findViewById<FloatingActionButton>(R.id.scanExpenseFAB)
+        scanExpenseFAB.setOnClickListener {
+            val intent = Intent(this, CameraScanner::class.java)
+            startActivity(intent)
+        }
 
         // addExpenseFAB
-
         val  addExpenseFAB = findViewById<FloatingActionButton>(R.id.addExpenseFAB)
         addExpenseFAB.setOnClickListener {
             val intent = Intent(this, AddTransactionActivity::class.java)
             startActivity(intent)
         }
 
-//        val addExpenseFAB = findViewById<FloatingActionButton>(R.id.addExpenseFAB)
-//        addExpenseFAB.setOnClickListener{
-//
-//            showAddExpenseFragment()
-//        }
+        // fragment Button
+        val fragmentButton = findViewById<Button>(R.id.showFragmentButton)
+        fragmentButton.setOnClickListener{
+            showFragment()
+        }
     }
-    private fun showAddExpenseFragment() {
-        val addExpenseFragment = supportFragmentManager.findFragmentByTag("addExpenseFragment")
+    // FRAGMENT UP FOR DIBBS
+    private fun showFragment() {
+        val fragment = supportFragmentManager.findFragmentByTag("addExpenseFragment")
 
-        if (addExpenseFragment != null) {
+        if (fragment != null) {
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.remove(addExpenseFragment)
+            transaction.remove(fragment)
             transaction.commit()
 
         } else {
-            val addExpenseFragment = AddExpenseFragment()
+            val fragmentUpForDibbs = FragmentUpForDibbs()
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(R.id.container, addExpenseFragment, "addExpenseFragment")
+            transaction.add(R.id.container, fragmentUpForDibbs, "addExpenseFragment")
             transaction.commit()
         }
     }
@@ -74,5 +74,4 @@ class OverView : AppCompatActivity() {
                 Log.d("!!!!", exception.toString())
             }
     }
-
 }

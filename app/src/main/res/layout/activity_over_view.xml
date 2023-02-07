@@ -93,4 +93,14 @@
 
     </FrameLayout>
 
+    <Button
+        android:id="@+id/showFragmentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="232dp"
+        android:text="free fragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
