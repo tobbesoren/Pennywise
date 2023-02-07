@@ -1,4 +1,4 @@
 package com.example.pennywise
 
-data class Balance(var kronor: Int = 0,
-                   var ore: Int = 0)
+data class Balance(var kronor: Long = 0,
+                   var ore: Long = 0)

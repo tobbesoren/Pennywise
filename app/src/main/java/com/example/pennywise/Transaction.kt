@@ -4,7 +4,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-data class Transaction (val amount: Int = 0,
+data class Transaction (val amount: Long = 0,
                         val category: String = "",
                         //Auto-timestamp
                         val timeStamp: String = DateTimeFormatter
