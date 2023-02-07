@@ -13,7 +13,7 @@ object DataHandler {
 
 
     fun addTransaction(userID: String,transaction: Transaction) {
-        if(Firebase.auth != null) {
+        if(Firebase.auth.uid != null) {
             Firebase.firestore.collection("users/${userID}/transactions").add(transaction)
                 .addOnSuccessListener { documentReference ->
                     Log.d("!!!!", "DocumentSnapshot added with ID: ${documentReference.id}")

@@ -47,9 +47,30 @@ class OverView : AppCompatActivity() {
             showFragment()
         }
     }
+
+    /**
+     * Updates ExpensePresentView on resuming
+     */
+    override fun onResume() {
+        super.onResume()
+        loadData(uid)
+    }
+    private fun loadData(userID: String) {
+        Firebase.firestore.collection("users/${userID}/transactions")
+            .get()
+            .addOnSuccessListener { documentSnapShot ->
+                DataHandler.makeListAndBalance(documentSnapShot)
+                expensePresentView.text = "${DataHandler.balance.kronor},${DataHandler.balance.ore} kr"
+                DataHandler.logData()
+            }.addOnFailureListener { exception ->
+                Log.d("!!!!", exception.toString())
+            }
+    }
+
     // FRAGMENT UP FOR DIBBS
     private fun showFragment() {
         val fragment = supportFragmentManager.findFragmentByTag("addExpenseFragment")
+
 
         if (fragment != null) {
             val transaction = supportFragmentManager.beginTransaction()
@@ -63,15 +84,5 @@ class OverView : AppCompatActivity() {
             transaction.commit()
         }
     }
-    private fun loadData(userID: String) {
-        Firebase.firestore.collection("users/${userID}/transactions")
-            .get()
-            .addOnSuccessListener { documentSnapShot ->
-                DataHandler.makeListAndBalance(documentSnapShot)
-                expensePresentView.text = "${DataHandler.balance.kronor} kr ${DataHandler.balance.ore} öre"
-                DataHandler.logData()
-            }.addOnFailureListener { exception ->
-                Log.d("!!!!", exception.toString())
-            }
-    }
+
 }
