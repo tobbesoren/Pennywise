@@ -48,6 +48,15 @@ class OverView : AppCompatActivity() {
 //            showAddExpenseFragment()
 //        }
     }
+
+    /**
+     * Updates ExpensePresentView on resuming
+     */
+    override fun onResume() {
+        super.onResume()
+        loadData(uid)
+    }
+
     private fun showAddExpenseFragment() {
         val addExpenseFragment = supportFragmentManager.findFragmentByTag("addExpenseFragment")
 

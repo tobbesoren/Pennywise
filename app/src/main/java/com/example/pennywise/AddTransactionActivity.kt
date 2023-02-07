@@ -3,6 +3,8 @@ package com.example.pennywise
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
@@ -29,6 +31,10 @@ class AddTransactionActivity : AppCompatActivity() {
         radioGroup = findViewById(R.id.radio_group)
         amountEditText = findViewById(R.id.amountEditText)
 
+        //This limits the input to two decimal places
+        amountEditText.addDecimalLimiter()
+
+
         val returnButton = findViewById<ImageButton>(R.id.returnIB)
         returnButton.setOnClickListener {
             finish()
@@ -37,7 +43,7 @@ class AddTransactionActivity : AppCompatActivity() {
         val saveButton = findViewById<FloatingActionButton>(R.id.saveFAB)
         saveButton.setOnClickListener {
 
-            val amount = amount2()
+            val amount = convertAmount()
             val category = rButtonChecked()
             val transaction = Transaction(amount, category)
 
@@ -52,10 +58,7 @@ class AddTransactionActivity : AppCompatActivity() {
                         "2. Date: ${transaction.timeStamp}")
                 finish()
             }
-
         }
-
-
     }
 
     private fun amount2 () : Int {
@@ -68,6 +71,14 @@ class AddTransactionActivity : AppCompatActivity() {
 
     }
 
+
+    /**
+     * Converts the amount input to ören. Replaces amount2()
+     */
+    private fun convertAmount(): Int {
+        return (amountEditText.text.toString().toFloat() * 100).toInt()
+    }
+
     private fun rButtonChecked() : String {
 
         val rButtonId = radioGroup.checkedRadioButtonId
@@ -75,5 +86,73 @@ class AddTransactionActivity : AppCompatActivity() {
         val radioButton = findViewById<RadioButton>(rButtonId)
 
         return radioButton.text.toString()
+    }
+
+    /*
+    I found this solution on Stack Overflow - I don't fully understand it yet, but I'm
+    looking into it...
+     */
+    /**
+     * Adds a DecimalLimiter to an EditText. Default value is 2 decimal places.
+     */
+    fun EditText.addDecimalLimiter(maxLimit: Int = 2) {
+
+        this.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable?) {
+                val str = this@addDecimalLimiter.text!!.toString()
+                if (str.isEmpty()) return
+                val str2 = decimalLimiter(str, maxLimit)
+
+                if (str2 != str) {
+                    this@addDecimalLimiter.setText(str2)
+                    val pos = this@addDecimalLimiter.text!!.length
+                    this@addDecimalLimiter.setSelection(pos)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+    }
+
+    fun decimalLimiter(string: String, MAX_DECIMAL: Int): String {
+
+        var inputString = string
+        if (inputString[0] == '.') inputString = "0$inputString"
+        val max = inputString.length
+
+        var rFinal = ""
+        var after = false
+        var i = 0
+        var up = 0
+        var decimal = 0
+        var t: Char
+
+        val decimalCount = inputString.count{ ".".contains(it) }
+
+        if (decimalCount > 1)
+            return inputString.dropLast(1)
+
+        while (i < max) {
+            t = inputString[i]
+            if (t != '.' && !after) {
+                up++
+            } else if (t == '.') {
+                after = true
+            } else {
+                decimal++
+                if (decimal > MAX_DECIMAL)
+                    return rFinal
+            }
+            rFinal += t
+            i++
+        }
+        return rFinal
     }
 }
