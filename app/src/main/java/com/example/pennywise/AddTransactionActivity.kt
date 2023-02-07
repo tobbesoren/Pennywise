@@ -31,9 +31,17 @@ class AddTransactionActivity : AppCompatActivity() {
         radioGroup = findViewById(R.id.radio_group)
         amountEditText = findViewById(R.id.amountEditText)
 
+//<<<<<<< HEAD
+        // The amount transferred from CameraScannerActivity
+        val scannedAmount = intent.getIntExtra("Amount",0)
+        if (scannedAmount > 0) {
+            amountEditText.setText(scannedAmount.toString())
+        }
+//=======
         //This limits the input to two decimal places
         amountEditText.addDecimalLimiter()
 
+//>>>>>>> main
 
         val returnButton = findViewById<ImageButton>(R.id.returnIB)
         returnButton.setOnClickListener {
@@ -50,6 +58,7 @@ class AddTransactionActivity : AppCompatActivity() {
             if (amount <= 0) {
                 Toast.makeText(this, "Fill in an amount to save transaction"
                     , Toast.LENGTH_LONG).show()
+                Log.d("!!!","amount after[ amount = amount2() ] = $amount")
             } else {
 
                 DataHandler.addTransaction(uid,transaction)
@@ -60,16 +69,20 @@ class AddTransactionActivity : AppCompatActivity() {
             }
         }
     }
-
+    // Sets text from amountEditText as Amount if filled in.
     private fun amount2 () : Int {
 
         var amount = 0
+
         if (amountEditText.text.isNotEmpty() && amountEditText.text.isDigitsOnly()) {
             amount = amountEditText.text.toString().toInt()
         }
         return amount
 
     }
+
+
+
 
 
     /**
@@ -79,6 +92,8 @@ class AddTransactionActivity : AppCompatActivity() {
         return (amountEditText.text.toString().toFloat() * 100).toInt()
     }
 
+
+    // fun to set the category from RadioButton ID:
     private fun rButtonChecked() : String {
 
         val rButtonId = radioGroup.checkedRadioButtonId
