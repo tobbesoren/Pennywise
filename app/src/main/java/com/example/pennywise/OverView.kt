@@ -60,7 +60,7 @@ class OverView : AppCompatActivity() {
             .get()
             .addOnSuccessListener { documentSnapShot ->
                 DataHandler.makeListAndBalance(documentSnapShot)
-                expensePresentView.text = "${DataHandler.balance.kronor} kr ${DataHandler.balance.ore} öre"
+                expensePresentView.text = "${DataHandler.balance.kronor},${DataHandler.balance.ore} kr"
                 DataHandler.logData()
             }.addOnFailureListener { exception ->
                 Log.d("!!!!", exception.toString())
