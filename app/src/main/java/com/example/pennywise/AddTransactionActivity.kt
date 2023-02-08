@@ -33,7 +33,7 @@ class AddTransactionActivity : AppCompatActivity() {
 
 //<<<<<<< HEAD
         // The amount transferred from CameraScannerActivity
-        val scannedAmount = intent.getIntExtra("Amount",0)
+        val scannedAmount = intent.getLongExtra("Amount",0)
         if (scannedAmount > 0) {
             amountEditText.setText(scannedAmount.toString())
         }
