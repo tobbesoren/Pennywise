@@ -34,7 +34,7 @@ class AddTransactionActivity : AppCompatActivity() {
 
         // The amount transferred from CameraScannerActivity
         // Needs to be fixed - if nothing is added in CameraScannerActivity, the app crashes!
-        val scannedAmount = intent.getIntExtra("Amount",0)
+        val scannedAmount = intent.getLongExtra("Amount",0)
         if (scannedAmount > 0) {
             amountEditText.setText(scannedAmount.toString())
         }
