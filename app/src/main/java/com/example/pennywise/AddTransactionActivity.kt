@@ -31,21 +31,19 @@ class AddTransactionActivity : AppCompatActivity() {
         radioGroup = findViewById(R.id.radio_group)
         amountEditText = findViewById(R.id.amountEditText)
 
-//<<<<<<< HEAD
+
         // The amount transferred from CameraScannerActivity
-<<<<<<< Updated upstream
-=======
-        // Needs to be fixed - if nothing is added in CameraScannerActivity, the app crashes!
->>>>>>> Stashed changes
         val scannedAmount = intent.getLongExtra("Amount",0)
+
+        
         if (scannedAmount > 0) {
             amountEditText.setText(scannedAmount.toString())
         }
-//=======
+
         //This limits the input to two decimal places
         amountEditText.addDecimalLimiter()
 
-//>>>>>>> main
+
 
         val returnButton = findViewById<ImageButton>(R.id.returnIB)
         returnButton.setOnClickListener {
@@ -92,8 +90,8 @@ class AddTransactionActivity : AppCompatActivity() {
     /**
      * Converts the amount input to ören. Replaces amount2()
      */
-    private fun convertAmount(): Int {
-        return (amountEditText.text.toString().toFloat() * 100).toInt()
+    private fun convertAmount(): Long {
+        return (amountEditText.text.toString().toFloat() * 100).toLong()
     }
 
 
@@ -143,7 +141,9 @@ class AddTransactionActivity : AppCompatActivity() {
     fun decimalLimiter(string: String, MAX_DECIMAL: Int): String {
 
         var inputString = string
-        if (inputString[0] == '.') inputString = "0$inputString"
+        if (inputString[0].toString() == getString(R.string.decimal_delimiter)) {
+            inputString = "0$inputString"
+        }
         val max = inputString.length
 
         var rFinal = ""
@@ -153,16 +153,18 @@ class AddTransactionActivity : AppCompatActivity() {
         var decimal = 0
         var t: Char
 
-        val decimalCount = inputString.count{ ".".contains(it) }
+        val decimalCount = inputString.count{
+            getString(R.string.decimal_delimiter).contains(it)
+        }
 
         if (decimalCount > 1)
             return inputString.dropLast(1)
 
         while (i < max) {
             t = inputString[i]
-            if (t != '.' && !after) {
+            if (t.toString() != getString(R.string.decimal_delimiter) && !after) {
                 up++
-            } else if (t == '.') {
+            } else if (t.toString() == getString(R.string.decimal_delimiter)) {
                 after = true
             } else {
                 decimal++

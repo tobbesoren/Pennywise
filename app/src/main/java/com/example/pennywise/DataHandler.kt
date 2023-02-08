@@ -41,7 +41,7 @@ object DataHandler {
 
     fun makeListAndBalance(documentSnapShot: QuerySnapshot) {
         itemsToView.clear()
-        var sum = 0
+        var sum : Long = 0
         for (document in documentSnapShot.documents) {
             val item = document.toObject<Transaction>()
             if (item != null) {
