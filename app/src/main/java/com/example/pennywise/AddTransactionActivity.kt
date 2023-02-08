@@ -90,7 +90,11 @@ class AddTransactionActivity : AppCompatActivity() {
      * Converts the amount input to ören. Replaces amount2()
      */
     private fun convertAmount(): Long {
-        return (amountEditText.text.toString().toFloat() * 100).toLong()
+        var amount: Long = 0
+        if(amountEditText.text.isNotEmpty()) {
+            amount = (amountEditText.text.toString().toFloat() * 100).toLong()
+        }
+        return amount
     }
 
 
