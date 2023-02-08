@@ -12,6 +12,9 @@
         android:theme="@style/Theme.PennyWise"
         tools:targetApi="31">
         <activity
+            android:name=".RecentTransactions"
+            android:exported="false" />
+        <activity
             android:name=".CameraScanner"
             android:exported="false" />
         <activity
