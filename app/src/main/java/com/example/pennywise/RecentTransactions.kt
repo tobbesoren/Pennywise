@@ -3,6 +3,7 @@ package com.example.pennywise
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
@@ -33,7 +34,7 @@ class RecentTransactions : AppCompatActivity() {
         labels.add("Today")
 
         setBarGraph(values, labels)
-        
+
     }
 
 
@@ -57,6 +58,12 @@ class RecentTransactions : AppCompatActivity() {
 
         //Make a dataset using the entries list
         val dataSet = BarDataSet(entries, "") // add entries to dataset
+
+        //The color needs to be set here, using a defined color in colors.xml
+        //var chartcolor = ContextCompat.getColor(this, R.color.black)
+        //dataSet.getColor(chartcolor)
+        //But somehow I can't seem to get this to work properly
+
         val barData = BarData(dataSet)
 
         //This separate class-file is used to change the labels on top of bars.
