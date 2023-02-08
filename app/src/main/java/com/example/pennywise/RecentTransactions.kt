@@ -14,9 +14,29 @@ class RecentTransactions : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recent_transactions)
 
-        
 
+        //Just giving the graph some initial, mock-values
+        val values : MutableList<Float> = ArrayList()
+        values.add(178f)
+        values.add(204f)
+        values.add(200f)
+        values.add(183f)
+        values.add(194f)
+        values.add(142f)
+
+        val labels : MutableList<String> = ArrayList()
+        labels.add("Monday")
+        labels.add("Tuesday")
+        labels.add("Wednesday")
+        labels.add("Thursday")
+        labels.add("Yesterday")
+        labels.add("Today")
+
+        setBarGraph(values, labels)
+        
     }
+
+
 
     //Init or change the graph, give it a list of floats and a list of strings (labels)
     //  The lists need to be the same length (i.e. as many values as labels)
