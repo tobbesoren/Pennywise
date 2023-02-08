@@ -10,4 +10,5 @@
     <string name="to_log_in">Please enter e-mail and password to log in</string>
     <string name="user_logged_in">User logged in</string>
     <string name="user_not_logged_in">User not logged in</string>
+    <string name="decimal_delimiter">.</string>
 </resources>
