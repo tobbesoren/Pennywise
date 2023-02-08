@@ -33,6 +33,10 @@ class AddTransactionActivity : AppCompatActivity() {
 
 //<<<<<<< HEAD
         // The amount transferred from CameraScannerActivity
+<<<<<<< Updated upstream
+=======
+        // Needs to be fixed - if nothing is added in CameraScannerActivity, the app crashes!
+>>>>>>> Stashed changes
         val scannedAmount = intent.getLongExtra("Amount",0)
         if (scannedAmount > 0) {
             amountEditText.setText(scannedAmount.toString())
