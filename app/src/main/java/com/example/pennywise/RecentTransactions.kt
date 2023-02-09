@@ -18,7 +18,6 @@ class RecentTransactions : AppCompatActivity() {
 
         //Just giving the graph some initial, mock-values
         val values : MutableList<Float> = ArrayList()
-        values.add(203f)
         values.add(178f)
         values.add(204f)
         values.add(200f)
@@ -27,7 +26,6 @@ class RecentTransactions : AppCompatActivity() {
         values.add(142f)
 
         val labels : MutableList<String> = ArrayList()
-        labels.add("03/02")
         labels.add("04/02")
         labels.add("05/02")
         labels.add("06/02")
@@ -62,8 +60,8 @@ class RecentTransactions : AppCompatActivity() {
         val dataSet = BarDataSet(entries, "") // add entries to dataset
 
         //The color needs to be set here, using a defined color in colors.xml
-        //var chartcolor = ContextCompat.getColor(this, R.color.black)
-        //dataSet.getColor(chartcolor)
+        val chartcolor = ContextCompat.getColor(this, R.color.black)
+        dataSet.setColor(chartcolor)
         //But somehow I can't seem to get this to work properly
 
         val barData = BarData(dataSet)
