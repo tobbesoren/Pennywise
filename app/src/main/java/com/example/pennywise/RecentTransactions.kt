@@ -33,15 +33,19 @@ class RecentTransactions : AppCompatActivity() {
         labels.add("Yesterday")
         labels.add("Today")
 
-        setBarGraph(values, labels)
+        setBarGraph(values, labels, 0)
+
+        //Black bars
+        //setBarGraph(values, labels, ContextCompat.getColor(this, R.color.black))
 
     }
 
 
 
-    //Init or change the graph, give it a list of floats and a list of strings (labels)
-    //  The lists need to be the same length (i.e. as many values as labels)
-    fun setBarGraph(entryValues : List<Float>, labels : List<String>){
+    //Init or change the graph, give it a list of floats, a list of strings (labels)
+    //  Giving "0" as the color will set it to the default blue.
+    //  The lists need to be the same length (i.e. as many values as labels).
+    fun setBarGraph(entryValues : List<Float>, labels : List<String>, chartColor : Int){
         val chart = findViewById<View>(R.id.chart) as BarChart
 
         if(entryValues.size != labels.size){
@@ -60,9 +64,9 @@ class RecentTransactions : AppCompatActivity() {
         val dataSet = BarDataSet(entries, "") // add entries to dataset
 
         //The color needs to be set here, using a defined color in colors.xml
-        val chartcolor = ContextCompat.getColor(this, R.color.black)
-        dataSet.setColor(chartcolor)
-        //But somehow I can't seem to get this to work properly
+        if(chartColor != 0){
+            dataSet.setColor(chartColor)
+        }
 
         val barData = BarData(dataSet)
 
