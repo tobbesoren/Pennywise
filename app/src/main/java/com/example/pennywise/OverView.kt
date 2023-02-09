@@ -41,11 +41,19 @@ class OverView : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // chartFAB
+        val chartFAB = findViewById<FloatingActionButton>(R.id.chartFAB)
+        chartFAB.setOnClickListener {
+            val intent = Intent(this, RecentTransactions::class.java)
+            startActivity(intent)
+        }
+
         // fragment Button
         val fragmentButton = findViewById<Button>(R.id.showFragmentButton)
         fragmentButton.setOnClickListener{
             showFragment()
         }
+
     }
 
     /**
