@@ -18,6 +18,7 @@ class RecentTransactions : AppCompatActivity() {
 
         //Just giving the graph some initial, mock-values
         val values : MutableList<Float> = ArrayList()
+        values.add(203f)
         values.add(178f)
         values.add(204f)
         values.add(200f)
@@ -26,10 +27,11 @@ class RecentTransactions : AppCompatActivity() {
         values.add(142f)
 
         val labels : MutableList<String> = ArrayList()
-        labels.add("Monday")
-        labels.add("Tuesday")
-        labels.add("Wednesday")
-        labels.add("Thursday")
+        labels.add("03/02")
+        labels.add("04/02")
+        labels.add("05/02")
+        labels.add("06/02")
+        labels.add("07/02")
         labels.add("Yesterday")
         labels.add("Today")
 
@@ -65,6 +67,8 @@ class RecentTransactions : AppCompatActivity() {
         //But somehow I can't seem to get this to work properly
 
         val barData = BarData(dataSet)
+
+        barData.setBarWidth(0.6f)
 
         //This separate class-file is used to change the labels on top of bars.
         val formatter : GraphFormatter = GraphFormatter()
