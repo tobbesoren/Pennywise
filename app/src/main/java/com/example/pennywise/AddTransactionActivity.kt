@@ -1,16 +1,12 @@
 package com.example.pennywise
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.isDigitsOnly
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
@@ -34,9 +30,9 @@ class AddTransactionActivity : AppCompatActivity() {
 
         // The amount transferred from CameraScannerActivity
         // Needs to be fixed - if nothing is added in CameraScannerActivity, the app crashes!
-        val scannedAmount = intent.getLongExtra("Amount",0)
-        if (scannedAmount > 0) {
-            amountEditText.setText(scannedAmount.toString())
+        val scannedAmount = intent.getStringExtra("Amount")
+        if (scannedAmount != null) {
+            amountEditText.setText(scannedAmount)
         }
 
         //This limits the input to two decimal places
@@ -82,17 +78,19 @@ class AddTransactionActivity : AppCompatActivity() {
 
     }
 
-
-
-
-
     /**
-     * Converts the amount input to ören. Replaces amount2()
+     * Converts the amount input from the edit text to cents/ören. Replaces amount2()
+     * Returns a Long.
      */
     private fun convertAmount(): Long {
+
         var amount: Long = 0
+
         if(amountEditText.text.isNotEmpty()) {
-            amount = (amountEditText.text.toString().toFloat() * 100).toLong()
+            val dollarsAndCents = amountEditText.text.toString()
+                .split(getString(R.string.decimal_delimiter))
+            amount = dollarsAndCents[0].toLong() * 100
+            if(dollarsAndCents.size == 2) amount += dollarsAndCents[1].toLong()
         }
         return amount
     }
