@@ -3,6 +3,7 @@ package com.example.pennywise
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
@@ -18,7 +19,6 @@ class RecentTransactions : AppCompatActivity() {
 
         //Just giving the graph some initial, mock-values
         val values : MutableList<Float> = ArrayList()
-        values.add(203f)
         values.add(178f)
         values.add(204f)
         values.add(200f)
@@ -26,8 +26,15 @@ class RecentTransactions : AppCompatActivity() {
         values.add(194f)
         values.add(142f)
 
+        val values2 : MutableList<Float> = ArrayList()
+        values2.add(101f)
+        values2.add(90f)
+        values2.add(71f)
+        values2.add(141f)
+        values2.add(51f)
+        values2.add(142f)
+
         val labels : MutableList<String> = ArrayList()
-        labels.add("03/02")
         labels.add("04/02")
         labels.add("05/02")
         labels.add("06/02")
@@ -35,15 +42,29 @@ class RecentTransactions : AppCompatActivity() {
         labels.add("Yesterday")
         labels.add("Today")
 
-        setBarGraph(values, labels)
+        setBarGraph(values, labels, 0)
+
+        //Black bars
+        //setBarGraph(values, labels, ContextCompat.getColor(this, R.color.black))
+
+        //Buttons for testing changing of charts
+        val button1 = findViewById<Button>(R.id.buttontest1)
+        button1.setOnClickListener {
+            setBarGraph(values, labels, 0)
+        }
+        val button2 = findViewById<Button>(R.id.buttontest2)
+        button2.setOnClickListener {
+            setBarGraph(values2,labels,ContextCompat.getColor(this, R.color.dark_tangerine))
+        }
 
     }
 
 
 
-    //Init or change the graph, give it a list of floats and a list of strings (labels)
-    //  The lists need to be the same length (i.e. as many values as labels)
-    fun setBarGraph(entryValues : List<Float>, labels : List<String>){
+    //Init or change the graph, give it a list of floats, a list of strings (labels)
+    //  Giving "0" as the color will set it to the default blue.
+    //  The lists need to be the same length (i.e. as many values as labels).
+    fun setBarGraph(entryValues : List<Float>, labels : List<String>, chartColor : Int){
         val chart = findViewById<View>(R.id.chart) as BarChart
 
         if(entryValues.size != labels.size){
@@ -62,13 +83,17 @@ class RecentTransactions : AppCompatActivity() {
         val dataSet = BarDataSet(entries, "") // add entries to dataset
 
         //The color needs to be set here, using a defined color in colors.xml
-        //var chartcolor = ContextCompat.getColor(this, R.color.black)
-        //dataSet.getColor(chartcolor)
-        //But somehow I can't seem to get this to work properly
+        if(chartColor != 0){
+            dataSet.setColor(chartColor)
+        }
+
+        //Draws a 1-pixel-wide borderline around the bars, not sure if we want this
+        //dataSet.barBorderWidth = 1f
 
         val barData = BarData(dataSet)
 
         barData.setBarWidth(0.6f)
+        barData.setDrawValues(true)
 
         //This separate class-file is used to change the labels on top of bars.
         val formatter : GraphFormatter = GraphFormatter()
