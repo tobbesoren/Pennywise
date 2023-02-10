@@ -3,6 +3,7 @@ package com.example.pennywise
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
@@ -25,6 +26,14 @@ class RecentTransactions : AppCompatActivity() {
         values.add(194f)
         values.add(142f)
 
+        val values2 : MutableList<Float> = ArrayList()
+        values2.add(101f)
+        values2.add(90f)
+        values2.add(71f)
+        values2.add(141f)
+        values2.add(51f)
+        values2.add(142f)
+
         val labels : MutableList<String> = ArrayList()
         labels.add("04/02")
         labels.add("05/02")
@@ -37,6 +46,16 @@ class RecentTransactions : AppCompatActivity() {
 
         //Black bars
         //setBarGraph(values, labels, ContextCompat.getColor(this, R.color.black))
+
+        //Buttons for testing changing of charts
+        val button1 = findViewById<Button>(R.id.buttontest1)
+        button1.setOnClickListener {
+            setBarGraph(values, labels, 0)
+        }
+        val button2 = findViewById<Button>(R.id.buttontest2)
+        button2.setOnClickListener {
+            setBarGraph(values2,labels,ContextCompat.getColor(this, R.color.dark_tangerine))
+        }
 
     }
 
@@ -68,9 +87,13 @@ class RecentTransactions : AppCompatActivity() {
             dataSet.setColor(chartColor)
         }
 
+        //Draws a 1-pixel-wide borderline around the bars, not sure if we want this
+        //dataSet.barBorderWidth = 1f
+
         val barData = BarData(dataSet)
 
         barData.setBarWidth(0.6f)
+        barData.setDrawValues(true)
 
         //This separate class-file is used to change the labels on top of bars.
         val formatter : GraphFormatter = GraphFormatter()
