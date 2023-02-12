@@ -1,5 +1,6 @@
 package com.example.pennywise
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,37 +8,39 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var emailEditText : EditText
+    private lateinit var emailEditText : TextInputLayout
     private lateinit var passwordEditText : EditText
 
     private val auth = Firebase.auth
 
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        emailEditText = findViewById(R.id.editTextEmail)
-        passwordEditText = findViewById(R.id.editTextPassword)
+        emailEditText = findViewById(R.id.textInputLayout2)
+        passwordEditText = findViewById(R.id.password_edit_text)
 
         checkIfLoggedIn()
 
         //Lets set up the buttons! Log in...
-        val logInButton = findViewById<Button>(R.id.buttonLogIn)
-        logInButton.setOnClickListener {
+        val signInButton = findViewById<Button>(R.id.signInButton)
+        signInButton.setOnClickListener {
             login()
         }
 
         //...and create user.
-        val createUserButton = findViewById<Button>(R.id.buttonCreateUser)
-        createUserButton.setOnClickListener {
+        val signUpButton = findViewById<Button>(R.id.signUpButton)
+        signUpButton.setOnClickListener {
             createUser()
         }
     }
@@ -47,7 +50,8 @@ class MainActivity : AppCompatActivity() {
      * password is entered - if not, returns with a Toast.
      */
     private fun createUser() {
-        val email = emailEditText.text.toString()
+
+        val email = emailEditText.editText?.text.toString()
         val password = passwordEditText.text.toString()
 
         /*
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         not the case (and displays a Toast)
         */
 
-        if(email.isEmpty() || password.isEmpty()) {
+        if(email.trim().isEmpty() || password.trim().isEmpty()) {
             Toast.makeText(this, getString(R.string.enter_email_and_password),
                 Toast.LENGTH_SHORT).show()
             return
@@ -88,7 +92,7 @@ class MainActivity : AppCompatActivity() {
      *user.
      */
     private fun login() {
-        val email = emailEditText.text.toString()
+        val email = emailEditText.editText?.text.toString()
         val password = passwordEditText.text.toString()
 
         //If the user hasn't entered email and/or password, we return early and get some Toast.
