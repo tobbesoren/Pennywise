@@ -20,11 +20,10 @@
 
     <TextView
         android:id="@+id/expenseTextView"
-        android:layout_width="156dp"
+        android:layout_width="wrap_content"
         android:layout_height="37dp"
         android:layout_marginTop="52dp"
         android:fontFamily="sans-serif"
-        android:text="19250 Kr"
         android:textAlignment="center"
         android:textColor="#FCA311"
         android:textSize="24sp"
