@@ -1,14 +1,70 @@
 <resources>
+    <!--AndroidManifest.xml-->
     <string name="app_name">PennyWise</string>
-    <string name="e_mail">E-mail</string>
-    <string name="password">Password</string>
-    <string name="log_in">Log in</string>
-    <string name="create_user">Create User</string>
+
+
+
+    <!--Below are strings for activities:-->
+    <!--***********************************************************************-->
+
+    <!--AddTransactionActivity.kt-->
+    <string name="decimal_delimiter">.</string>
+
+    <!--CameraScannerActivity.kt-->
+
+    <!--DataHandler.kt-->
+
+    <!--FragmentUpForDibs.kt-->
+
+    <!--GraphFormatter.kt-->
+
+    <!--MainActivity.kt-->
     <string name="enter_email_and_password">Enter e-mail and password</string>
     <string name="user_created">User created</string>
     <string name="user_not_created">User not created</string>
     <string name="to_log_in">Please enter e-mail and password to log in</string>
     <string name="user_logged_in">User logged in</string>
     <string name="user_not_logged_in">User not logged in</string>
-    <string name="decimal_delimiter">.</string>
+
+    <!--OverView.kt-->
+    <string name="expenses_view">%1$s.%2$s $</string>
+
+    <!--RecentTransactions.kt-->
+
+    <!--Transaction.kt-->
+
+    <!--***********************************************************************-->
+
+
+
+    <!--Below are strings for layouts:-->
+    <!--***********************************************************************-->
+
+    <!--activity_add_transaction.xml-->
+
+    <!--activity_camera_scanner.xml-->
+
+    <!--activity_main.xml-->
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="create_user">Create User</string>
+
+    <!--activity_over_view.xml-->
+
+    <!--activity_recent_transactions.xml-->
+
+    <!--***********************************************************************-->
+
+    
+
+    <!--Below are strings for fragments:-->
+    <!--***********************************************************************-->
+
+    <!--fragment_up_for_dibs.xml-->
+
+    <!--***********************************************************************-->
+
+
+
 </resources>
