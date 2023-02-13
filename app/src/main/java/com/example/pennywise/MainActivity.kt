@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "${getString(
                         R.string.user_not_created)} ${task.exception.toString()}",
                         Toast.LENGTH_SHORT).show()
+                    passwordEditText.error
                     Log.d("!!!!", "user not created ${task.exception}")
                 }
             }

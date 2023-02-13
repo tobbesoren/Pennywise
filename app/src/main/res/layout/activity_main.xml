@@ -61,5 +61,5 @@
         android:text="sign up"
         app:layout_constraintEnd_toStartOf="@+id/signInButton"
         app:layout_constraintTop_toTopOf="@+id/signInButton" />
-    
+
 </androidx.constraintlayout.widget.ConstraintLayout>
