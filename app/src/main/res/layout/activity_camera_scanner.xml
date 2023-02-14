@@ -6,6 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".CameraScanner">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/inputImageBtn"
+        android:layout_width="70dp"
+        android:layout_height="66dp"
+        android:layout_weight="1"
+        android:text="take Image"
+        app:icon="@drawable/baseline_add_a_photo_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/toTransactionIB"
+        app:layout_constraintHorizontal_bias="0.742"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.566" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/recognizeTextBtn"
+        android:layout_width="70dp"
+        android:layout_height="66dp"
+        android:layout_weight="1"
+        android:text="Recognize Text"
+        app:icon="@drawable/baseline_document_scanner_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.762"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.566" />
+
     <EditText
         android:id="@+id/editTextNumberDecimal"
         android:layout_width="wrap_content"
@@ -26,5 +54,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
         app:srcCompat="@drawable/baseline_library_add_24" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageIv"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/baseline_image_24"
+        app:layout_constraintBottom_toTopOf="@+id/editTextNumberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="2dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
