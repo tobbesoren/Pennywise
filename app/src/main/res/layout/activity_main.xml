@@ -12,7 +12,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="180dp"
-        android:hint="Username"
+        android:hint="@string/e_mail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,7 +27,7 @@
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginTop="4dp"
-        android:hint="password"
+        android:hint="@string/password"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginTop="4dp"
-        android:text="sign in"
+        android:text="@string/sign_in"
         app:layout_constraintEnd_toEndOf="@+id/password_text_input"
         app:layout_constraintTop_toBottomOf="@+id/password_text_input" />
 
@@ -58,7 +58,7 @@
         android:layout_marginEnd="4dp"
         android:layout_toStartOf="@id/signInButton"
         android:layout_toLeftOf="@id/signInButton"
-        android:text="sign up"
+        android:text="@string/sign_up"
         app:layout_constraintEnd_toStartOf="@+id/signInButton"
         app:layout_constraintTop_toTopOf="@+id/signInButton" />
 

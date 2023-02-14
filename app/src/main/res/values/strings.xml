@@ -9,6 +9,9 @@
 
     <!--AddTransactionActivity.kt-->
     <string name="decimal_delimiter">.</string>
+    <string name="fill_in_an_amount_to_save_transaction">Fill in an amount to save transaction</string>
+
+    <!--Balance-->
 
     <!--CameraScannerActivity.kt-->
 
@@ -21,10 +24,10 @@
     <!--MainActivity.kt-->
     <string name="enter_email_and_password">Enter e-mail and password</string>
     <string name="user_created">User created</string>
-    <string name="user_not_created">User not created</string>
+    <string name="user_not_created">User not created %1$s</string>
     <string name="to_log_in">Please enter e-mail and password to log in</string>
     <string name="user_logged_in">User logged in</string>
-    <string name="user_not_logged_in">User not logged in</string>
+    <string name="user_not_logged_in">User not logged in %1$s</string>
 
     <!--OverView.kt-->
     <string name="expenses_view">%1$s.%2$s $</string>
@@ -41,6 +44,14 @@
     <!--***********************************************************************-->
 
     <!--activity_add_transaction.xml-->
+    <string name="amusement">Amusement</string>
+    <string name="household">Household</string>
+    <string name="transportation">Transportation</string>
+    <string name="dining">Dining</string>
+    <string name="healthcare_wellness">Healthcare / Wellness</string>
+    <string name="groceries">Groceries</string>
+    <string name="other">Other</string>
+    <string name="amount">Amount :</string>
 
     <!--activity_camera_scanner.xml-->
 
@@ -49,10 +60,18 @@
     <string name="password">Password</string>
     <string name="log_in">Log in</string>
     <string name="create_user">Create User</string>
+    <string name="sign_in">sign in</string>
+    <string name="sign_up">sign up</string>
+
 
     <!--activity_over_view.xml-->
+    <string name="expenses">Expenses</string>
+    <string name="scan_expense">Scan expense</string>
+    <string name="free_fragment">free fragment</string>
 
     <!--activity_recent_transactions.xml-->
+    <string name="test_1">Test 1</string>
+    <string name="test_2">Test 2</string>
 
     <!--***********************************************************************-->
 

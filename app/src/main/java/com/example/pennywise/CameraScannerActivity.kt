@@ -23,8 +23,8 @@ class CameraScanner : AppCompatActivity() {
 
             val intent = Intent(this, AddTransactionActivity::class.java)
             // We need to check this! Doesn't play well with DecimalLimiter.
-            intent.putExtra("Amount",input.text.toString())
-            Log.d("!!!","amount before startactivity = ${input.text}")
+            intent.putExtra("Amount", input.text.toString())
+            Log.d("!!!","amount before startActivity = ${input.text}")
             finish()
             startActivity(intent)
 

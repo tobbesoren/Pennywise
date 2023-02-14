@@ -7,7 +7,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.isDigitsOnly
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -29,7 +28,6 @@ class AddTransactionActivity : AppCompatActivity() {
 
 
         // The amount transferred from CameraScannerActivity
-        // Needs to be fixed - if nothing is added in CameraScannerActivity, the app crashes!
         val scannedAmount = intent.getStringExtra("Amount")
         if (scannedAmount != null) {
             amountEditText.setText(scannedAmount)
@@ -53,12 +51,10 @@ class AddTransactionActivity : AppCompatActivity() {
             val transaction = Transaction(amount, category)
 
             if (amount <= 0) {
-                Toast.makeText(this, "Fill in an amount to save transaction"
+                Toast.makeText(this, getString(R.string.fill_in_an_amount_to_save_transaction)
                     , Toast.LENGTH_LONG).show()
-                Log.d("!!!","amount after[ amount = amount2() ] = $amount")
             } else {
-
-                DataHandler.addTransaction(uid,transaction)
+                DataHandler.addTransaction(uid, transaction)
                 Log.d("!!!", " transaction contains 1.Amount: ${transaction.amount}. " +
                         "2. Category: ${transaction.category}. " +
                         "2. Date: ${transaction.timeStamp}")
@@ -66,20 +62,10 @@ class AddTransactionActivity : AppCompatActivity() {
             }
         }
     }
-    // Sets text from amountEditText as Amount if filled in.
-    private fun amount2 () : Int {
 
-        var amount = 0
-
-        if (amountEditText.text.isNotEmpty() && amountEditText.text.isDigitsOnly()) {
-            amount = amountEditText.text.toString().toInt()
-        }
-        return amount
-
-    }
 
     /**
-     * Converts the amount input from the edit text to cents/ören. Replaces amount2()
+     * Converts the amount input from the edit text to cents. Replaces amount2()
      * Returns a Long.
      */
     private fun convertAmount(): Long {

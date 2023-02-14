@@ -71,8 +71,6 @@ class OverView : AppCompatActivity() {
                 val dollars = DataHandler.balance.kronor.toString()
                 val cents = DataHandler.balance.ore.toString().padStart(2,'0')
                 expensePresentView.text = getString(R.string.expenses_view, dollars, cents)
-                    /*"${DataHandler.balance.kronor}," +
-                        "${DataHandler.balance.ore.toString().padStart(2,'0')} ${getString(R.string.currency)}"*/
                 DataHandler.logData()
             }.addOnFailureListener { exception ->
                 Log.d("!!!!", exception.toString())
