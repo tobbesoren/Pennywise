@@ -1,6 +1,7 @@
 package com.example.pennywise
 
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore

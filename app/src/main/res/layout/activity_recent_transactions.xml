@@ -40,7 +40,7 @@
         android:layout_marginTop="64dp"
         android:layout_marginEnd="112dp"
         android:backgroundTint="#4474ED"
-        android:text="Test 1"
+        android:text="@string/test_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView9" />
@@ -52,7 +52,7 @@
         android:layout_marginStart="112dp"
         android:layout_marginTop="64dp"
         android:backgroundTint="#8F5E4E"
-        android:text="Test 2"
+        android:text="@string/test_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView9" />

@@ -75,14 +75,15 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this,
                         getString(R.string.user_created),
                         Toast.LENGTH_SHORT).show()
-                    Log.d("!!!!", "create user successful")
+                    Log.d("!!!!", "User created")
                     goToOverView()
                 } else {
-                    Toast.makeText(this, "${getString(
-                        R.string.user_not_created)} ${task.exception.toString()}",
+                    Toast.makeText(this, getString(
+                        R.string.user_not_created, task.exception
+                    ),
                         Toast.LENGTH_SHORT).show()
                     passwordEditText.error
-                    Log.d("!!!!", "user not created ${task.exception}")
+                    Log.d("!!!!", "User not created ${task.exception}")
                 }
             }
     }
@@ -112,8 +113,8 @@ class MainActivity : AppCompatActivity() {
                     Log.d("!!!!", "User logged in")
                     goToOverView()
                 } else {
-                    Toast.makeText(this, "${getString(
-                        R.string.user_not_logged_in)} ${task.exception.toString()}"
+                    Toast.makeText(this, getString(
+                        R.string.user_not_logged_in, task.exception)
                         , Toast.LENGTH_SHORT).show()
                     Log.d("!!!!", "User not logged in: ${task.exception}")
                 }

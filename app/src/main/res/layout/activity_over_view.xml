@@ -43,7 +43,8 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expenseTextView"
-        app:srcCompat="@drawable/baseline_document_scanner_24" />
+        app:srcCompat="@drawable/baseline_document_scanner_24"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/textView2"
@@ -51,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="3dp"
         android:layout_marginBottom="-3dp"
-        android:text="Expenses"
+        android:text="@string/expenses"
         app:layout_constraintBottom_toTopOf="@+id/expenseTextView"
         app:layout_constraintStart_toStartOf="@+id/expenseTextView" />
 
@@ -67,7 +68,8 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scanExpenseFAB"
-        app:srcCompat="@drawable/baseline_library_add_24" />
+        app:srcCompat="@drawable/baseline_library_add_24"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/textView3"
@@ -76,7 +78,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="24dp"
         android:fontFamily="sans-serif"
-        android:text="Scan expense"
+        android:text="@string/scan_expense"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="@+id/scanExpenseFAB"
         app:layout_constraintStart_toEndOf="@+id/scanExpenseFAB" />
@@ -98,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="232dp"
-        android:text="free fragment"
+        android:text="@string/free_fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -114,6 +116,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scanExpenseFAB"
-        app:srcCompat="@drawable/baseline_insert_chart_24" />
+        app:srcCompat="@drawable/baseline_insert_chart_24"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
