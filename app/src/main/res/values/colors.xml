@@ -11,4 +11,17 @@
     <color name="columbia_blue">#C5DDD9</color>
     <color name="dark_tangerine">#FCA311</color>
     <color name="pale_cerulean">#98C1D8</color>
+
+    <color name="colorPrimaryBackground">#C5DDD9</color>
+
+    <color name="colorPrimary">#E0E0E0</color>
+    <color name="colorPrimaryDark">#FBB8AC</color>
+    <color name="colorAccent">#FEDBD0</color>
+    <color name="textColorPrimary">#442C2E</color>
+    <color name="toolbarIconColor">@color/textColorPrimary</color>
+    <color name="loginPageBackgroundColor">#FFFFFF</color>
+    <color name="productGridBackgroundColor">#FFFFFF</color>
+    <color name="textInputOutlineColor">#FBB8AC</color>
+
+
 </resources>
