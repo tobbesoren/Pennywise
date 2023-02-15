@@ -3,10 +3,15 @@ package com.example.pennywise
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -26,6 +31,9 @@ class OverView : AppCompatActivity() {
         expensePresentView = findViewById(R.id.expenseTextView)
 
         loadData(uid)
+
+        // Set up the toolbar.
+//        (activity as AppCompatActivity).setSupportActionBar(view.app_bar)
 
         // scanExpenseFAB functionality
         val scanExpenseFAB = findViewById<FloatingActionButton>(R.id.scanExpenseFAB)
@@ -54,6 +62,35 @@ class OverView : AppCompatActivity() {
             showFragment()
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_pennywise, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.logout -> {
+                signOut()
+                return true
+            } R.id.category -> {
+                Toast.makeText(this,"choose MF!",Toast.LENGTH_LONG).show()
+                return true
+            } R.id.transportation -> {
+                Toast.makeText(this,"Showing the amount of tansportation",Toast.LENGTH_LONG).show()
+                return true
+            } R.id.amusement -> {
+                Toast.makeText(this,"amount of amusement", Toast.LENGTH_LONG).show()
+                return true
+            } else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun signOut() {
+        Firebase.auth.signOut()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     /**

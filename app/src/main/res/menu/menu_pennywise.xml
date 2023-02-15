@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <item
+        android:id="@+id/logout"
+        android:title="logout"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/category"
+        android:title="category"
+        app:showAsAction="never">
+
+        <menu>
+
+            <item
+                android:id="@+id/transportation"
+                android:title="@string/transportation"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/amusement"
+                android:title="@string/amusement"
+                app:showAsAction="never"/>
+
+        </menu>
+
+    </item>
+
+</menu>

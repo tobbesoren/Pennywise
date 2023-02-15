@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:clickable="true"
-        app:backgroundTint="#98C1D8"
+        app:backgroundTint="@color/pale_cerulean"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +79,7 @@
         android:layout_marginBottom="24dp"
         android:fontFamily="sans-serif"
         android:text="@string/scan_expense"
-        android:textSize="8sp"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/scanExpenseFAB"
         app:layout_constraintStart_toEndOf="@+id/scanExpenseFAB" />
 
