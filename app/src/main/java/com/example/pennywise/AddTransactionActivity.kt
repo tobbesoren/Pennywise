@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import java.time.Instant
@@ -18,6 +19,7 @@ class AddTransactionActivity : AppCompatActivity() {
 
     private lateinit var amountEditText: EditText
     private lateinit var radioGroup: RadioGroup
+    private lateinit var noteTextInput: TextInputLayout
 
     private val uid = Firebase.auth.uid.toString()
 
@@ -28,6 +30,7 @@ class AddTransactionActivity : AppCompatActivity() {
 
         radioGroup = findViewById(R.id.radio_group)
         amountEditText = findViewById(R.id.amountEditText)
+        noteTextInput = findViewById(R.id.noteTextInput)
 
 
         // The amount transferred from CameraScannerActivity
@@ -64,6 +67,7 @@ class AddTransactionActivity : AppCompatActivity() {
                 val month: String = timeStamp.slice(5..6)
                 val day: String = timeStamp.slice(8..9)
                 val time: String = timeStamp.slice(11..18)
+                val note = noteTextInput.editText?.text.toString()
 
                 val transaction = Transaction(
                     amount,
@@ -72,7 +76,8 @@ class AddTransactionActivity : AppCompatActivity() {
                     year,
                     month,
                     day,
-                    time)
+                    time,
+                    note)
                 DataHandler.addTransaction(uid, transaction)
                 Log.d("!!!", " transaction contains 1.Amount: ${transaction.amount}. " +
                         "2. Category: ${transaction.category}. " +
