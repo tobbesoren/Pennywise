@@ -9,6 +9,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.Toast
 import android.util.Log
 import android.view.Menu
 import android.widget.*
@@ -27,7 +31,7 @@ class CameraScanner : AppCompatActivity() {
     private lateinit var inputImageBtn: MaterialButton
     private lateinit var recognizeTextBtn: MaterialButton
     private lateinit var imageIv: ImageView
-    private lateinit var recognizedTextEt: EditText
+
 
 
     private companion object{
@@ -69,15 +73,7 @@ class CameraScanner : AppCompatActivity() {
             showInputImageDialog()
         }
 
-        recognizeTextBtn.setOnClickListener {
-            if (imageUri == null){
-                //imageUri is null, we havent picked an image yet
-                showToast("Pick image First...")
-            }
-            else{
-                recognizeTextfromImage()
-            }
-        }
+
 
 
 
@@ -92,6 +88,16 @@ class CameraScanner : AppCompatActivity() {
             finish()
             startActivity(intent)
 
+        }
+
+        recognizeTextBtn.setOnClickListener {
+            if (imageUri == null){
+                //imageUri is null, we havent picked an image yet
+                showToast("Pick image First...")
+            }
+            else{
+                recognizeTextfromImage()
+            }
         }
     }
     private fun recognizeTextfromImage() {
@@ -110,9 +116,9 @@ class CameraScanner : AppCompatActivity() {
 
                     progressDialog.dismiss()
                     // get the recognized text
-                    val recognizedText = text.text
+                    val inputT = text.text
                     // sets the recognized text to edit text
-                    recognizedTextEt.setText(recognizedText)
+                    input.setText(inputT)
 
                 }
                 .addOnFailureListener { e->
