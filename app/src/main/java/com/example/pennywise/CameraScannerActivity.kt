@@ -191,29 +191,9 @@ class CameraScanner : AppCompatActivity() {
                 Log.d("PhotoPicker", "No media selected")
             }
         }
-        // set the type of file
-        intent.type = "image/*"
-        galleryActivityResultLauncher.launch(intent)
+
     }
 
-    private val  galleryActivityResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result->
-            // here we will recive the image
-            if (result.resultCode == Activity.RESULT_OK){
-                // image picked
-                val data = result.data
-                imageUri = data!!.data
-
-                // set to imageView
-                imageIv.setImageURI(imageUri)
-
-            }
-            else{
-                //cancelled
-                showToast("Cancelled....!")
-
-            }
-        }
 
 
     private fun pickImageCamera(){
@@ -249,11 +229,7 @@ class CameraScanner : AppCompatActivity() {
 
 
 
-    private fun checkStoragePermission() : Boolean{
-        // checks storage permission returns true or false
-        return ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
 
-    }
 
     private fun checkCameraPermissions() : Boolean{
         //checks camera permissions return true or false
@@ -263,10 +239,7 @@ class CameraScanner : AppCompatActivity() {
         return cameraResult && storageResult
     }
 
-    private fun requestStoragePermission(){
-        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE)
 
-    }
 
     private fun requestCameraPermissions(){
         ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE)
