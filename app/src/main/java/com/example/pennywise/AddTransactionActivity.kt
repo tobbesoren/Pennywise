@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 class AddTransactionActivity : AppCompatActivity() {
 
@@ -47,13 +50,29 @@ class AddTransactionActivity : AppCompatActivity() {
         saveButton.setOnClickListener {
 
             val amount = convertAmount()
-            val category = rButtonChecked()
-            val transaction = Transaction(amount, category)
 
             if (amount <= 0) {
                 Toast.makeText(this, getString(R.string.fill_in_an_amount_to_save_transaction)
                     , Toast.LENGTH_LONG).show()
             } else {
+                val category = rButtonChecked()
+                val timeStamp: String = DateTimeFormatter
+                    .ofPattern("yyyy-MM-dd HH:mm:ss")
+                    .withZone(ZoneOffset.systemDefault())
+                    .format(Instant.now())
+                val year: String = timeStamp.slice(0..3)
+                val month: String = timeStamp.slice(5..6)
+                val day: String = timeStamp.slice(8..9)
+                val time: String = timeStamp.slice(11..18)
+
+                val transaction = Transaction(
+                    amount,
+                    category,
+                    timeStamp,
+                    year,
+                    month,
+                    day,
+                    time)
                 DataHandler.addTransaction(uid, transaction)
                 Log.d("!!!", " transaction contains 1.Amount: ${transaction.amount}. " +
                         "2. Category: ${transaction.category}. " +

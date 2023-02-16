@@ -9,8 +9,11 @@ import java.time.format.DateTimeFormatter
 // -year, month, day - apart from the timestamp, to make searching easier (not sure about this)
 data class Transaction (val amount: Long = 0,
                         val category: String = "",
-                        //Auto-timestamp
-                        val timeStamp: String = DateTimeFormatter
-                            .ofPattern("yyyy-MM-dd HH:mm:ss")
-                            .withZone(ZoneOffset.systemDefault())
-                            .format(Instant.now()))
+                        val timeStamp: String ="",
+                        val year: String = "",
+                        val month: String = "",
+                        val day: String = "",
+                        val time: String = "",
+                        val note: String = "",)
+
+
