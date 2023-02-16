@@ -51,7 +51,8 @@
     <string name="healthcare_wellness">Healthcare / Wellness</string>
     <string name="groceries">Groceries</string>
     <string name="other">Other</string>
-    <string name="amount">Amount :</string>
+    <string name="amount">Amount:</string>
+    <string name="note">Note:</string>
 
     <!--activity_camera_scanner.xml-->
 
