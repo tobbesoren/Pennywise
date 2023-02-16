@@ -16,14 +16,17 @@ import android.widget.Toast
 import android.util.Log
 import android.view.Menu
 import android.widget.*
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.pennywise.CameraScanner.Companion.MEDIA_REQUEST_CODE
 import com.google.android.material.button.MaterialButton
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+
 
 class CameraScanner : AppCompatActivity() {
 
@@ -37,6 +40,7 @@ class CameraScanner : AppCompatActivity() {
     private companion object{
         private const val CAMERA_REQUEST_CODE =100
         private const val STORAGE_REQUEST_CODE =101
+        private const val MEDIA_REQUEST_CODE =102
     }
 
     // Uri of the image from  camera/gallery
@@ -45,6 +49,7 @@ class CameraScanner : AppCompatActivity() {
     // arrays of the permissions
     private lateinit var cameraPermissions: Array<String>
     private lateinit var storagePermissions: Array<String>
+    private lateinit var mediaPermissions: Array<String>
     // progress dialog
     private lateinit var progressDialog: ProgressDialog
     //Textrecog
@@ -137,6 +142,7 @@ class CameraScanner : AppCompatActivity() {
         }
     }
 
+
     private fun showInputImageDialog() {
         // init PopupMenu
         val popupMenu = PopupMenu(this, inputImageBtn)
@@ -160,16 +166,11 @@ class CameraScanner : AppCompatActivity() {
                 }
 
             }
-            else if (id == 2){
 
-                if (checkStoragePermission()){
-                    pickImageGallery()
-                }
-                else{
-                    requestStoragePermission()
-                }
-
+            else if(id == 2){
+                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
+
 
             return@setOnMenuItemClickListener true
 
@@ -181,6 +182,15 @@ class CameraScanner : AppCompatActivity() {
     private fun pickImageGallery(){
         // intent to pick image from gallery
         val intent = Intent(Intent.ACTION_PICK)
+        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the
+            // photo picker.
+            if (uri != null) {
+                Log.d("PhotoPicker", "Selected URI: $uri")
+            } else {
+                Log.d("PhotoPicker", "No media selected")
+            }
+        }
         // set the type of file
         intent.type = "image/*"
         galleryActivityResultLauncher.launch(intent)
@@ -242,6 +252,7 @@ class CameraScanner : AppCompatActivity() {
     private fun checkStoragePermission() : Boolean{
         // checks storage permission returns true or false
         return ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
     }
 
     private fun checkCameraPermissions() : Boolean{
@@ -254,12 +265,15 @@ class CameraScanner : AppCompatActivity() {
 
     private fun requestStoragePermission(){
         ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE)
+
     }
 
     private fun requestCameraPermissions(){
         ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE)
 
     }
+
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -289,10 +303,22 @@ class CameraScanner : AppCompatActivity() {
                 if (grantResults.isNotEmpty()){
                     val storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
 
+
                     if (storageAccepted){
                         pickImageGallery()
                     }
                     else{
+                        showToast("Permission missing, check your settings")
+                    }
+                }
+            }
+            MEDIA_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty()) {
+                    val mediaAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+
+                    if (mediaAccepted) {
+                        pickImageGallery()
+                    } else {
                         showToast("Permission missing, check your settings")
                     }
                 }
@@ -307,5 +333,16 @@ class CameraScanner : AppCompatActivity() {
 
     private fun showToast(message: String){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
+    }
+    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // Callback is invoked after the user selects a media item or closes the
+        // photo picker.
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: $uri")
+            imageUri = uri
+            imageIv.setImageURI(imageUri)
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
     }
 }
