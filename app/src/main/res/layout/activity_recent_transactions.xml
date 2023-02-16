@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C5DDD9"
+    android:background="@color/alabaster"
     tools:context=".RecentTransactions">
 
     <ImageView
@@ -25,7 +25,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
-        android:background="#E9E9E9"
+        android:background="@color/champagne"
         app:layout_constraintBottom_toBottomOf="@+id/imageView9"
         app:layout_constraintEnd_toEndOf="@+id/imageView9"
         app:layout_constraintStart_toStartOf="@+id/imageView9"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="112dp"
-        android:backgroundTint="#4474ED"
+        android:backgroundTint="@color/cornflower"
         android:text="@string/test_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="112dp"
         android:layout_marginTop="64dp"
-        android:backgroundTint="#8F5E4E"
+        android:backgroundTint="@color/cornflower"
         android:text="@string/test_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     /**
      * Called when Create User Button is pressed. Creates a new user if e-mail and
      * password is entered - if not, returns with a Toast.
