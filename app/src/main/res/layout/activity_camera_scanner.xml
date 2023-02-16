@@ -4,35 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#C5DDD9"
     tools:context=".CameraScanner">
 
-    <com.google.android.material.button.MaterialButton
+    <ImageButton
         android:id="@+id/inputImageBtn"
-        android:layout_width="70dp"
+        android:layout_width="66dp"
         android:layout_height="66dp"
+        android:layout_marginTop="32dp"
         android:layout_weight="1"
-        android:text="take Image"
-        app:icon="@drawable/baseline_add_a_photo_24"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:backgroundTint="#98C1D8"
         app:layout_constraintEnd_toStartOf="@+id/toTransactionIB"
-        app:layout_constraintHorizontal_bias="0.742"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.566" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
+        app:srcCompat="@drawable/baseline_add_a_photo_24" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageButton
         android:id="@+id/recognizeTextBtn"
-        android:layout_width="70dp"
+        android:layout_width="66dp"
         android:layout_height="66dp"
+        android:layout_marginTop="32dp"
         android:layout_weight="1"
-        android:text="Recognize Text"
-        app:icon="@drawable/baseline_document_scanner_24"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:backgroundTint="#98C1D8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.762"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.566" />
+        app:layout_constraintHorizontal_bias="0.471"
+        app:layout_constraintStart_toEndOf="@+id/toTransactionIB"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
+        app:srcCompat="@drawable/baseline_document_scanner_24" />
 
     <EditText
         android:id="@+id/editTextNumberDecimal"
@@ -50,6 +49,7 @@
         android:layout_width="70dp"
         android:layout_height="66dp"
         android:layout_marginTop="32dp"
+        app:backgroundTint="#98C1D8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"

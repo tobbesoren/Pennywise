@@ -28,8 +28,8 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 class CameraScanner : AppCompatActivity() {
 
     private lateinit var input : EditText
-    private lateinit var inputImageBtn: MaterialButton
-    private lateinit var recognizeTextBtn: MaterialButton
+    private lateinit var inputImageBtn: ImageButton
+    private lateinit var recognizeTextBtn: ImageButton
     private lateinit var imageIv: ImageView
 
 
