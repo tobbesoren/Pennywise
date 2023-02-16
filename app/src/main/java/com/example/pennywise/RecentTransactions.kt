@@ -54,7 +54,7 @@ class RecentTransactions : AppCompatActivity() {
         }
         val button2 = findViewById<Button>(R.id.buttontest2)
         button2.setOnClickListener {
-            setBarGraph(values2,labels,ContextCompat.getColor(this, R.color.dark_tangerine))
+            setBarGraph(values2,labels,ContextCompat.getColor(this, R.color.yellow_orange))
         }
 
     }

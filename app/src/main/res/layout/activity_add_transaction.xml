@@ -5,7 +5,7 @@
     android:id="@+id/radioGroup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C5DDD9"
+    android:background="@color/alabaster"
     tools:context=".AddTransactionActivity">
 
     <RadioGroup
@@ -21,24 +21,28 @@
             android:id="@+id/radio_Amusement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/old_burgundy"
             android:text="@string/amusement" />
 
         <RadioButton
             android:id="@+id/radio_Household"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/old_burgundy"
             android:text="@string/household" />
 
         <RadioButton
             android:id="@+id/radio_Transportation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/old_burgundy"
             android:text="@string/transportation" />
 
         <RadioButton
             android:id="@+id/radio_Dining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/old_burgundy"
             android:text="@string/dining" />
 
         <RadioButton
@@ -52,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
+            android:textColor="@color/old_burgundy"
             android:text="@string/groceries" />
 
         <RadioButton
@@ -60,7 +65,7 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="@string/other"
-            android:textColor="#FCA311" />
+            android:textColor="@color/yellow_orange" />
     </RadioGroup>
 
     <ImageButton
@@ -69,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#C5DDD9"
+        android:backgroundTint="@color/alabaster"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
@@ -94,6 +99,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:clickable="true"
+        android:backgroundTint="@color/cornflower"
+        android:foregroundTint="@color/old_burgundy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
