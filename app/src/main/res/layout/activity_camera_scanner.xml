@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C5DDD9"
+    android:background="@color/alabaster"
     tools:context=".CameraScanner">
 
     <ImageButton
@@ -13,7 +13,8 @@
         android:layout_height="66dp"
         android:layout_marginTop="32dp"
         android:layout_weight="1"
-        app:backgroundTint="#98C1D8"
+        app:tint="@color/old_burgundy"
+        app:backgroundTint="@color/cornflower"
         app:layout_constraintEnd_toStartOf="@+id/toTransactionIB"
         app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +27,8 @@
         android:layout_height="66dp"
         android:layout_marginTop="32dp"
         android:layout_weight="1"
-        app:backgroundTint="#98C1D8"
+        app:tint="@color/old_burgundy"
+        app:backgroundTint="@color/cornflower"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.471"
         app:layout_constraintStart_toEndOf="@+id/toTransactionIB"
@@ -49,7 +51,8 @@
         android:layout_width="70dp"
         android:layout_height="66dp"
         android:layout_marginTop="32dp"
-        app:backgroundTint="#98C1D8"
+        app:tint="@color/old_burgundy"
+        app:backgroundTint="@color/cornflower"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
@@ -60,11 +63,13 @@
         android:layout_width="300dp"
         android:layout_height="250dp"
         android:adjustViewBounds="true"
+        android:background="@color/alabaster"
         android:src="@drawable/baseline_image_24"
         app:layout_constraintBottom_toTopOf="@+id/editTextNumberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/old_burgundy"
         app:strokeWidth="2dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
