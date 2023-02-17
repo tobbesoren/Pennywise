@@ -2,9 +2,9 @@ package com.example.pennywise
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
-import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
@@ -12,6 +12,9 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 
 class RecentTransactions : AppCompatActivity() {
+
+    var transactionList : List<Transaction> = DataHandler.itemsToView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recent_transactions)
@@ -19,28 +22,25 @@ class RecentTransactions : AppCompatActivity() {
 
         //Just giving the graph some initial, mock-values
         val values : MutableList<Float> = ArrayList()
-        values.add(178f)
-        values.add(204f)
-        values.add(200f)
-        values.add(183f)
-        values.add(194f)
-        values.add(142f)
+        val labels : MutableList<String> = ArrayList()
 
-        val values2 : MutableList<Float> = ArrayList()
+        val newTransactionList = sortTransactionList(transactionList)
+        val daysTransactionList = formatListForDays(newTransactionList)
+
+        for (i in daysTransactionList.indices){
+            values.add(daysTransactionList[i].amount.toFloat())
+            labels.add(daysTransactionList[i].timeStamp)
+        }
+
+
+        /*val values2 : MutableList<Float> = ArrayList()
         values2.add(101f)
         values2.add(90f)
         values2.add(71f)
         values2.add(141f)
         values2.add(51f)
-        values2.add(142f)
+        values2.add(142f)*/
 
-        val labels : MutableList<String> = ArrayList()
-        labels.add("04/02")
-        labels.add("05/02")
-        labels.add("06/02")
-        labels.add("07/02")
-        labels.add("Yesterday")
-        labels.add("Today")
 
         setBarGraph(values, labels, 0)
 
@@ -54,11 +54,34 @@ class RecentTransactions : AppCompatActivity() {
         }
         val button2 = findViewById<Button>(R.id.buttontest2)
         button2.setOnClickListener {
-            setBarGraph(values2,labels,ContextCompat.getColor(this, R.color.yellow_orange))
+            //setBarGraph(values2,labels,ContextCompat.getColor(this, R.color.yellow_orange))
         }
 
     }
 
+    //Sorts the transaction list by year -> month -> day
+    fun sortTransactionList(transactions : List<Transaction>) : MutableList<Transaction> {
+        return transactions.sortedWith(compareBy<Transaction> {it.year}.thenBy {it.month}
+            .thenBy {it.day}) as MutableList<Transaction>
+    }
+
+    fun formatListForDays(transactions : List<Transaction>) : MutableList<Transaction>{
+        val formattedList : MutableList<Transaction> = ArrayList()
+        for (i in transactions.indices){
+            if (formattedList.isEmpty()){
+                formattedList.add(transactions[i]) //If this is the first call, just add it
+            } else if(formattedList.last().day.equals(transactions[i].day)
+                && formattedList.last().month.equals(transactions[i].month)
+                && formattedList.last().year.equals(transactions[i].year)){
+                formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
+                // ^Temporary horrible code line as I couldn't update just the amount
+                Log.d("!!!!!","I HAPPENED")
+            } else{
+                formattedList.add(transactions[i])
+            }
+        }
+        return formattedList
+    }
 
 
     //Init or change the graph, give it a list of floats, a list of strings (labels)
