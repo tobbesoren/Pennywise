@@ -38,6 +38,7 @@
         <item>Months</item>
     </string-array>
     <string-array name="category_array">
+        <item>All</item>
         <item>Amusement</item>
         <item>Household</item>
         <item>Transportation</item>

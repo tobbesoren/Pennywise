@@ -17,8 +17,10 @@ import com.github.mikephil.charting.data.BarEntry
 
 class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-
+    //Main data
     var transactionList : List<Transaction> = DataHandler.itemsToView
+    //Which category is being viewed?
+    var currentCat : String = "All"
 
 
     //For spinners
@@ -31,7 +33,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         //If the spinner option selected was "Days"
         if(parent.getItemAtPosition(pos).equals("Days")){
             //Order and format list by days
-            val newTransactionList = sortTransactionList(transactionList)
+            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val newTransactionList = sortTransactionList(filteredTransactionList)
             val daysTransactionList = formatListForDays(newTransactionList)
             //Convert to separate lists
             for (i in daysTransactionList.indices){
@@ -41,8 +44,9 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Set the graph
             setBarGraph(values, labels, 0)
         } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
-            //Order and format list by days
-            val newTransactionList = sortTransactionList(transactionList)
+            //Order and format list by months
+            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val newTransactionList = sortTransactionList(filteredTransactionList)
             val monthsTransactionList = formatListForMonths(newTransactionList)
             //Convert to separate lists
             for (i in monthsTransactionList.indices){
@@ -51,18 +55,15 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             //Set the bar graph
             setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
+        } else{
+            //Else happens if the category changed, thus change the currentCat
+            currentCat = parent.getItemAtPosition(pos).toString()
         }
 
     }
     override fun onNothingSelected(parent:AdapterView<*>){
         //Another interface callback
     }
-
-    //CLEAN UP THE CODE
-    //REMOVE THE BUTTONS?
-    //CHECK IF YOU CAN MAKE THE SPINNERS NEATER
-    //COMMIT, PUSH TO GIT (might need to update token)
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,30 +84,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             labels.add(daysTransactionList[i].timeStamp)
         }
 
-
-        /*val values2 : MutableList<Float> = ArrayList()
-        values2.add(101f)
-        values2.add(90f)
-        values2.add(71f)
-        values2.add(141f)
-        values2.add(51f)
-        values2.add(142f)*/
-
-
         setBarGraph(values, labels, 0)
-
-        //Black bars
-        //setBarGraph(values, labels, ContextCompat.getColor(this, R.color.black))
-
-        //Buttons for testing changing of charts
-        val button1 = findViewById<Button>(R.id.buttontest1)
-        button1.setOnClickListener {
-            setBarGraph(values, labels, 0)
-        }
-        val button2 = findViewById<Button>(R.id.buttontest2)
-        button2.setOnClickListener {
-            //setBarGraph(values2,labels,ContextCompat.getColor(this, R.color.yellow_orange))
-        }
 
         //Spinner stuff
         val spinner : Spinner = findViewById(R.id.spinner1)
@@ -122,7 +100,17 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             // apply the adapter to the spinner
             spinner.adapter = adapter
         }
-
+        //Same for second spinner
+        val spinner2 : Spinner = findViewById(R.id.spinner2)
+        spinner2.onItemSelectedListener = this
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.category_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+            spinner2.adapter = adapter
+        }
     }
 
     //Sorts the transaction list by year -> month -> day
@@ -142,7 +130,6 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
-                Log.d("!!!!!","I HAPPENED")
             } else{
                 formattedList.add(transactions[i])
             }
@@ -160,7 +147,6 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
-                Log.d("!!!!!","I HAPPENED")
             } else{
                 formattedList.add(transactions[i])
             }
@@ -168,6 +154,14 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         return formattedList
     }
 
+    //Filter the list based on category
+    fun sortListOnCategory(transactions : MutableList<Transaction>, cat : String) : MutableList<Transaction>{
+        if(cat.equals("All")){
+            return transactions
+        }else{
+            return transactions.filter { it.category == cat }.toMutableList()
+        }
+    }
 
     //Init or change the graph, give it a list of floats, a list of strings (labels)
     //  Giving "0" as the color will set it to the default blue.
