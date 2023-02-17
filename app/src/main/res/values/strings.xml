@@ -33,6 +33,20 @@
     <string name="expenses_view">%1$s.%2$s $</string>
 
     <!--RecentTransactions.kt-->
+    <string-array name="days_months_array">
+        <item>Days</item>
+        <item>Months</item>
+    </string-array>
+    <string-array name="category_array">
+        <item>All</item>
+        <item>Amusement</item>
+        <item>Household</item>
+        <item>Transportation</item>
+        <item>Dining</item>
+        <item>Healthcare / Wellness</item>
+        <item>Groceries</item>
+        <item>Other</item>
+    </string-array>
 
     <!--Transaction.kt-->
 
