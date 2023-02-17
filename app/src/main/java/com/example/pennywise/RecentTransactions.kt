@@ -25,7 +25,8 @@ class RecentTransactions : AppCompatActivity() {
         val labels : MutableList<String> = ArrayList()
 
         val newTransactionList = sortTransactionList(transactionList)
-        val daysTransactionList = formatListForDays(newTransactionList)
+        //val daysTransactionList = formatListForDays(newTransactionList)
+        val daysTransactionList = formatListForMonths(newTransactionList)
 
         for (i in daysTransactionList.indices){
             values.add(daysTransactionList[i].amount.toFloat())
@@ -65,6 +66,7 @@ class RecentTransactions : AppCompatActivity() {
             .thenBy {it.day}) as MutableList<Transaction>
     }
 
+    //Adds all values for days together
     fun formatListForDays(transactions : List<Transaction>) : MutableList<Transaction>{
         val formattedList : MutableList<Transaction> = ArrayList()
         for (i in transactions.indices){
@@ -72,6 +74,24 @@ class RecentTransactions : AppCompatActivity() {
                 formattedList.add(transactions[i]) //If this is the first call, just add it
             } else if(formattedList.last().day.equals(transactions[i].day)
                 && formattedList.last().month.equals(transactions[i].month)
+                && formattedList.last().year.equals(transactions[i].year)){
+                formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
+                // ^Temporary horrible code line as I couldn't update just the amount
+                Log.d("!!!!!","I HAPPENED")
+            } else{
+                formattedList.add(transactions[i])
+            }
+        }
+        return formattedList
+    }
+
+    //Adds all values for months together (only one line differs.. can these be combined?)
+    fun formatListForMonths(transactions : List<Transaction>) : MutableList<Transaction>{
+        val formattedList : MutableList<Transaction> = ArrayList()
+        for (i in transactions.indices){
+            if (formattedList.isEmpty()){
+                formattedList.add(transactions[i]) //If this is the first call, just add it
+            } else if(formattedList.last().month.equals(transactions[i].month)
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
