@@ -4,16 +4,66 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 
-class RecentTransactions : AppCompatActivity() {
+class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+
 
     var transactionList : List<Transaction> = DataHandler.itemsToView
+
+
+    //For spinners
+    override fun onItemSelected(parent: AdapterView<*>, View: View?, pos: Int, id: Long){
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
+
+        val values : MutableList<Float> = ArrayList()
+        val labels : MutableList<String> = ArrayList()
+        //If the spinner option selected was "Days"
+        if(parent.getItemAtPosition(pos).equals("Days")){
+            //Order and format list by days
+            val newTransactionList = sortTransactionList(transactionList)
+            val daysTransactionList = formatListForDays(newTransactionList)
+            //Convert to separate lists
+            for (i in daysTransactionList.indices){
+                values.add(daysTransactionList[i].amount.toFloat())
+                labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
+            }
+            //Set the graph
+            setBarGraph(values, labels, 0)
+        } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
+            //Order and format list by days
+            val newTransactionList = sortTransactionList(transactionList)
+            val monthsTransactionList = formatListForMonths(newTransactionList)
+            //Convert to separate lists
+            for (i in monthsTransactionList.indices){
+                values.add(monthsTransactionList[i].amount.toFloat())
+                labels.add(monthsTransactionList[i].month)
+            }
+            //Set the bar graph
+            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
+        }
+
+    }
+    override fun onNothingSelected(parent:AdapterView<*>){
+        //Another interface callback
+    }
+
+    //CLEAN UP THE CODE
+    //REMOVE THE BUTTONS?
+    //CHECK IF YOU CAN MAKE THE SPINNERS NEATER
+    //COMMIT, PUSH TO GIT (might need to update token)
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +106,21 @@ class RecentTransactions : AppCompatActivity() {
         val button2 = findViewById<Button>(R.id.buttontest2)
         button2.setOnClickListener {
             //setBarGraph(values2,labels,ContextCompat.getColor(this, R.color.yellow_orange))
+        }
+
+        //Spinner stuff
+        val spinner : Spinner = findViewById(R.id.spinner1)
+        spinner.onItemSelectedListener = this
+        // Create an ArrayAdapter using a string array and the default spinner layout
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.days_months_array,
+            android.R.layout.simple_spinner_item
+        ).also{ adapter ->
+            // specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+            // apply the adapter to the spinner
+            spinner.adapter = adapter
         }
 
     }
