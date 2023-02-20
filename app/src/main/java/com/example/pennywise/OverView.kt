@@ -18,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 class OverView : AppCompatActivity() {
 
     private lateinit var expensePresentView: TextView
+    private lateinit var expenseTextView: TextView
 
     private val uid = Firebase.auth.uid.toString()
 
@@ -27,6 +28,7 @@ class OverView : AppCompatActivity() {
         setContentView(R.layout.activity_over_view)
 
         expensePresentView = findViewById(R.id.expenseTextView)
+        expenseTextView = findViewById(R.id.expense2TextView)
 
         loadData(uid)
 
@@ -73,28 +75,38 @@ class OverView : AppCompatActivity() {
                 signOut()
                 return true
             } R.id.category -> {
-                Toast.makeText(this,"choose MF!",Toast.LENGTH_LONG).show()
+                return true
+            } R.id.allMenu -> {
+                loadData(uid)
+                expenseTextView.setText(R.string.expenses)
                 return true
             } R.id.amusementMenu -> {
                 setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.amusement)))
+                expenseTextView.setText(R.string.amusement)
                 return true
             } R.id.householdMenu -> {
                 setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.household)))
+                expenseTextView.setText(R.string.household)
                 return true
             } R.id.transportationMenu -> {
                 setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.transportation)))
+                expenseTextView.setText(R.string.transportation)
                 return true
             } R.id.diningMenu -> {
                 setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.dining)))
+                expenseTextView.setText(R.string.dining)
                 return true
             } R.id.hcWellnMenu -> {
                 setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.healthcare_wellness)))
+                expenseTextView.setText(R.string.healthcare_wellness)
                 return true
             } R.id.groceriesMenu -> {
                 setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.groceries)))
+                expenseTextView.setText(R.string.groceries)
                 return true
             } R.id.otherMenu -> {
                 setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.other)))
+                expenseTextView.setText(R.string.other)
                 return true
             } else -> super.onOptionsItemSelected(item)
         }

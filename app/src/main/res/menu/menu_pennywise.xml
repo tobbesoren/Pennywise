@@ -44,6 +44,10 @@
                 android:id="@+id/otherMenu"
                 android:title="@string/other"
                 app:showAsAction="never"/>
+            <item
+                android:id="@+id/allMenu"
+                android:title="@string/all"
+                app:showAsAction="never"/>
 
         </menu>
 

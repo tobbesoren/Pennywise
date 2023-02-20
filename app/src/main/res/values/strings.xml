@@ -83,6 +83,7 @@
     <string name="expenses">Expenses</string>
     <string name="scan_expense">Scan expense</string>
     <string name="free_fragment">free fragment</string>
+    <string name="all">All</string>
 
     <!--activity_recent_transactions.xml-->
     <string name="test_1">Test 1</string>
