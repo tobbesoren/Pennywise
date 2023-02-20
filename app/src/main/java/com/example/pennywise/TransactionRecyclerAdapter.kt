@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 class TransactionRecyclerAdapter (context: Context, private val transactions: List<Transaction>)
     : RecyclerView.Adapter<TransactionRecyclerAdapter.ViewHolder>() {
 
+    val context = context
+
     var layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -20,8 +22,9 @@ class TransactionRecyclerAdapter (context: Context, private val transactions: Li
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val transaction = transactions[position]
 
-        //Change to actual views
-        holder.amountTextView.text = transaction.amount.toString()
+        val balance = Balance()
+        balance.setAmount(transaction.amount)
+        holder.amountTextView.text = balance.balanceString(context)
         holder.timestampTextView.text = transaction.timeStamp
         holder.categoryTextView.text = transaction.category
         holder.noteTextView.text = transaction.note

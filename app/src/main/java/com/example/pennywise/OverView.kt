@@ -125,8 +125,8 @@ class OverView : AppCompatActivity() {
     }
 
     private fun setMoneyText(amount : Balance) {
-        val dollars = amount.kronor.toString()
-        val cents = amount.ore.toString().padStart(2,'0')
+        val dollars = amount.dollars.toString()
+        val cents = amount.cents.toString().padStart(2,'0')
         expensePresentView.text = getString(R.string.expenses_view, dollars, cents)
         DataHandler.logData()
 

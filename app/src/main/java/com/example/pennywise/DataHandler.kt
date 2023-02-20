@@ -49,8 +49,8 @@ object DataHandler {
                 sum += item.amount
             }
         }
-        balance.kronor = sum / 100
-        balance.ore = sum % 100
+        balance.dollars = sum / 100
+        balance.cents = sum % 100
     }
 
     fun logData() {
@@ -67,8 +67,8 @@ object DataHandler {
             if (transaction.category == category) {
                 sum += transaction.amount
             }
-        balance.kronor = sum / 100
-        balance.ore = sum % 100
+        balance.dollars = sum / 100
+        balance.cents = sum % 100
 
         return balance
     }
