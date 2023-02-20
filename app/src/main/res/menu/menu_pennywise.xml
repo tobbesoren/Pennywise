@@ -17,12 +17,32 @@
         <menu>
 
             <item
-                android:id="@+id/transportation"
+                android:id="@+id/amusementMenu"
+                android:title="@string/amusement"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/householdMenu"
+                android:title="@string/household"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/transportationMenu"
                 android:title="@string/transportation"
                 app:showAsAction="never"/>
             <item
-                android:id="@+id/amusement"
-                android:title="@string/amusement"
+                android:id="@+id/diningMenu"
+                android:title="@string/dining"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/hcWellnMenu"
+                android:title="@string/healthcare_wellness"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/groceriesMenu"
+                android:title="@string/groceries"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/otherMenu"
+                android:title="@string/other"
                 app:showAsAction="never"/>
 
         </menu>

@@ -1,7 +1,6 @@
 package com.example.pennywise
 
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -59,5 +58,19 @@ object DataHandler {
             Log.d("!!!!", item.toString())
         }
         Log.d("!!!!", balance.toString())
+    }
+
+    fun getBalanceByCategory(category: String) : Balance {
+        var sum : Long = 0
+        var balance = Balance()
+        for (transaction in itemsToView)
+            if (transaction.category == category) {
+                sum += transaction.amount
+            }
+        balance.kronor = sum / 100
+        balance.ore = sum % 100
+
+        return balance
+
     }
 }

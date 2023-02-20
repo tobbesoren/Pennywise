@@ -3,11 +3,9 @@ package com.example.pennywise
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
@@ -77,11 +75,26 @@ class OverView : AppCompatActivity() {
             } R.id.category -> {
                 Toast.makeText(this,"choose MF!",Toast.LENGTH_LONG).show()
                 return true
-            } R.id.transportation -> {
-                Toast.makeText(this,"Showing the amount of tansportation",Toast.LENGTH_LONG).show()
+            } R.id.amusementMenu -> {
+                setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.amusement)))
                 return true
-            } R.id.amusement -> {
-                Toast.makeText(this,"amount of amusement", Toast.LENGTH_LONG).show()
+            } R.id.householdMenu -> {
+                setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.household)))
+                return true
+            } R.id.transportationMenu -> {
+                setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.transportation)))
+                return true
+            } R.id.diningMenu -> {
+                setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.dining)))
+                return true
+            } R.id.hcWellnMenu -> {
+                setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.healthcare_wellness)))
+                return true
+            } R.id.groceriesMenu -> {
+                setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.groceries)))
+                return true
+            } R.id.otherMenu -> {
+                setMoneyText(DataHandler.getBalanceByCategory(getString(R.string.other)))
                 return true
             } else -> super.onOptionsItemSelected(item)
         }
@@ -105,13 +118,18 @@ class OverView : AppCompatActivity() {
             .get()
             .addOnSuccessListener { documentSnapShot ->
                 DataHandler.makeListAndBalance(documentSnapShot)
-                val dollars = DataHandler.balance.kronor.toString()
-                val cents = DataHandler.balance.ore.toString().padStart(2,'0')
-                expensePresentView.text = getString(R.string.expenses_view, dollars, cents)
-                DataHandler.logData()
+                setMoneyText(DataHandler.balance)
             }.addOnFailureListener { exception ->
                 Log.d("!!!!", exception.toString())
             }
+    }
+
+    private fun setMoneyText(amount : Balance) {
+        val dollars = amount.kronor.toString()
+        val cents = amount.ore.toString().padStart(2,'0')
+        expensePresentView.text = getString(R.string.expenses_view, dollars, cents)
+        DataHandler.logData()
+
     }
 
     // FRAGMENT UP FOR DIBBS

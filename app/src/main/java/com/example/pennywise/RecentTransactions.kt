@@ -42,7 +42,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
                 labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
             }
             //Set the graph
-            setBarGraph(values, labels, 0)
+            setBarGraph(values, labels, R.color.cornflower)
         } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
             //Order and format list by months
             val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
