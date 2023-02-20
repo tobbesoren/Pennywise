@@ -228,7 +228,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
         //Put all floats in entryValues in the entry list
         for (i in entryValues.indices){
-            entries.add(BarEntry(i.toFloat(),entryValues[i]))
+            entries.add(BarEntry(i.toFloat(),entryValues[i]/100)) //divide by 100 because of öre
         }
 
         //Make a dataset using the entries list
