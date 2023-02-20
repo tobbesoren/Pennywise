@@ -8,7 +8,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 object DataHandler {
-    val itemsToView = mutableListOf<Transaction>()
+    val allTransactions = mutableListOf<Transaction>()
     var balance = Balance()
 
 
@@ -40,21 +40,22 @@ object DataHandler {
 
 
     fun makeListAndBalance(documentSnapShot: QuerySnapshot) {
-        itemsToView.clear()
+        allTransactions.clear()
         var sum : Long = 0
         for (document in documentSnapShot.documents) {
             val item = document.toObject<Transaction>()
             if (item != null) {
-                itemsToView.add(item)
+                allTransactions.add(item)
                 sum += item.amount
             }
         }
+        allTransactions.sortByDescending { it.timeStamp }
         balance.dollars = sum / 100
         balance.cents = sum % 100
     }
 
     fun logData() {
-        for (item in itemsToView) {
+        for (item in allTransactions) {
             Log.d("!!!!", item.toString())
         }
         Log.d("!!!!", balance.toString())
@@ -63,7 +64,7 @@ object DataHandler {
     fun getBalanceByCategory(category: String) : Balance {
         var sum : Long = 0
         var balance = Balance()
-        for (transaction in itemsToView)
+        for (transaction in allTransactions)
             if (transaction.category == category) {
                 sum += transaction.amount
             }

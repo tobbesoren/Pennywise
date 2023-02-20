@@ -2,7 +2,6 @@ package com.example.pennywise
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -17,7 +16,7 @@ import com.github.mikephil.charting.data.BarEntry
 class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     //Main data
-    var transactionList : List<Transaction> = DataHandler.itemsToView
+    var transactionList : List<Transaction> = DataHandler.allTransactions
     //Which category is being viewed?
     var currentCat : String = "All"
 
@@ -73,7 +72,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = TransactionRecyclerAdapter(this, DataHandler.itemsToView)
+        val adapter = TransactionRecyclerAdapter(this, DataHandler.allTransactions)
         recyclerView.adapter = adapter
 
         val returnButton = findViewById<ImageButton>(R.id.returnIB)

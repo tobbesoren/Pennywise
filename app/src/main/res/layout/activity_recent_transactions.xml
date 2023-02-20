@@ -30,6 +30,7 @@
         app:srcCompat="@drawable/rectangle_30" />
 
     <!-- Should the background color be @color/champagne?-->
+
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart"
         android:layout_width="0dp"
@@ -48,25 +49,20 @@
 
     <Spinner
         android:id="@+id/spinner1"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="220dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.755"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
     <Spinner
         android:id="@+id/spinner2"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="220dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinner1"
         app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
