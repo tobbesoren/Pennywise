@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -78,6 +75,11 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
         val adapter = TransactionRecyclerAdapter(this, DataHandler.itemsToView)
         recyclerView.adapter = adapter
+
+        val returnButton = findViewById<ImageButton>(R.id.returnIB)
+        returnButton.setOnClickListener {
+            finish()
+        }
 
 
         //Just giving the graph some initial, mock-values

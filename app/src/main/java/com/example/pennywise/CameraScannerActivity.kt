@@ -104,6 +104,11 @@ class CameraScanner : AppCompatActivity() {
                 recognizeTextfromImage()
             }
         }
+
+        val returnButton = findViewById<ImageButton>(R.id.returnIB)
+        returnButton.setOnClickListener {
+            finish()
+        }
     }
     private fun recognizeTextfromImage() {
         // set message and show progress dialog

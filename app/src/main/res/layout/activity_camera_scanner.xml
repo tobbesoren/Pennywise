@@ -8,6 +8,17 @@
     tools:context=".CameraScanner">
 
     <ImageButton
+        android:id="@+id/returnIB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/alabaster"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+
+    <ImageButton
         android:id="@+id/inputImageBtn"
         android:layout_width="66dp"
         android:layout_height="66dp"
