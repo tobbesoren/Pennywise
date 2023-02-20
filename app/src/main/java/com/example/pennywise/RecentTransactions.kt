@@ -19,9 +19,10 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     var transactionList : List<Transaction> = DataHandler.allTransactions
     //Which category is being viewed?
     var currentCat : String = "All"
+    var currentInterval : String = "Days"
 
 
-    //For spinners
+    //For spinners, I believe this can be broken down into smaller functions
     override fun onItemSelected(parent: AdapterView<*>, View: View?, pos: Int, id: Long){
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
@@ -30,6 +31,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val labels : MutableList<String> = ArrayList()
         //If the spinner option selected was "Days"
         if(parent.getItemAtPosition(pos).equals("Days")){
+            //Set currentInterval to chosen spinner option
+            currentInterval = parent.getItemAtPosition(pos).toString()
             //Order and format list by days
             val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val newTransactionList = sortTransactionList(filteredTransactionList)
@@ -42,6 +45,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Set the graph
             setBarGraph(values, labels, R.color.cornflower)
         } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
+            //Set currentInterval to chosen spinner option
+            currentInterval = parent.getItemAtPosition(pos).toString()
             //Order and format list by months
             val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val newTransactionList = sortTransactionList(filteredTransactionList)
@@ -53,9 +58,36 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             //Set the bar graph
             setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
-        } else{
-            //Else happens if the category changed, thus change the currentCat
+        } else if(currentInterval == "Days") {
+            //Set currentCat to whichever category is chosen
             currentCat = parent.getItemAtPosition(pos).toString()
+            //Run the same code as in the "days" if-statement.. this could probably be broken out
+            //Order and format list by days
+            val filteredTransactionList =
+                sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val newTransactionList = sortTransactionList(filteredTransactionList)
+            val daysTransactionList = formatListForDays(newTransactionList)
+            //Convert to separate lists
+            for (i in daysTransactionList.indices) {
+                values.add(daysTransactionList[i].amount.toFloat())
+                labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
+            }
+            //Set the graph
+            setBarGraph(values, labels, R.color.cornflower)
+        } else{
+            //Same but for month, this can also probably be broken out to another function
+            currentCat = parent.getItemAtPosition(pos).toString()
+            //Order and format list by months
+            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val newTransactionList = sortTransactionList(filteredTransactionList)
+            val monthsTransactionList = formatListForMonths(newTransactionList)
+            //Convert to separate lists
+            for (i in monthsTransactionList.indices){
+                values.add(monthsTransactionList[i].amount.toFloat())
+                labels.add(monthsTransactionList[i].month)
+            }
+            //Set the bar graph
+            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
         }
 
     }
