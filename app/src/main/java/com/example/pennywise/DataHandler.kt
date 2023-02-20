@@ -71,6 +71,5 @@ object DataHandler {
         balance.ore = sum % 100
 
         return balance
-
     }
 }
