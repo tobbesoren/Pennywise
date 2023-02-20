@@ -157,8 +157,12 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     //Sorts the transaction list by year -> month -> day
     fun sortTransactionList(transactions : List<Transaction>) : MutableList<Transaction> {
-        return transactions.sortedWith(compareBy<Transaction> {it.year}.thenBy {it.month}
-            .thenBy {it.day}) as MutableList<Transaction>
+        val newTransactionList = transactions.sortedWith(compareBy<Transaction> {it.year}.thenBy {it.month}
+            .thenBy {it.day})
+        if(newTransactionList.isEmpty()){
+            return noDataList() //If empty return this list instead (prevents crash)
+        }
+        return newTransactionList as MutableList<Transaction>
     }
 
     //Adds all values for days together
@@ -201,7 +205,11 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         if(cat.equals("All")){
             return transactions
         }else{
-            return transactions.filter { it.category == cat }.toMutableList()
+            val sortedList = transactions.filter { it.category == cat }
+            if(sortedList.isEmpty()){
+                return noDataList() //If empty return this list instead (prevents crash)
+            }
+            return sortedList.toMutableList()
         }
     }
 
@@ -266,4 +274,11 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.invalidate()
     }
 
+    //Returns an empty transaction list (used to handle cases with no data)
+    fun noDataList() : MutableList<Transaction>{
+        val noDataTransactionList : MutableList<Transaction> =
+            ArrayList()
+        noDataTransactionList.add(Transaction(0))
+        return noDataTransactionList
+    }
 }
