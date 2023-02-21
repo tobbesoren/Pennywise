@@ -19,9 +19,10 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     var transactionList : List<Transaction> = DataHandler.allTransactions
     //Which category is being viewed?
     var currentCat : String = "All"
+    var currentInterval : String = "Days"
 
 
-    //For spinners
+    //For spinners, I believe this can be broken down into smaller functions
     override fun onItemSelected(parent: AdapterView<*>, View: View?, pos: Int, id: Long){
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
@@ -30,6 +31,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val labels : MutableList<String> = ArrayList()
         //If the spinner option selected was "Days"
         if(parent.getItemAtPosition(pos).equals("Days")){
+            //Set currentInterval to chosen spinner option
+            currentInterval = parent.getItemAtPosition(pos).toString()
             //Order and format list by days
             val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val newTransactionList = sortTransactionList(filteredTransactionList)
@@ -42,6 +45,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Set the graph
             setBarGraph(values, labels, R.color.cornflower)
         } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
+            //Set currentInterval to chosen spinner option
+            currentInterval = parent.getItemAtPosition(pos).toString()
             //Order and format list by months
             val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val newTransactionList = sortTransactionList(filteredTransactionList)
@@ -53,9 +58,36 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             //Set the bar graph
             setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
-        } else{
-            //Else happens if the category changed, thus change the currentCat
+        } else if(currentInterval == "Days") {
+            //Set currentCat to whichever category is chosen
             currentCat = parent.getItemAtPosition(pos).toString()
+            //Run the same code as in the "days" if-statement.. this could probably be broken out
+            //Order and format list by days
+            val filteredTransactionList =
+                sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val newTransactionList = sortTransactionList(filteredTransactionList)
+            val daysTransactionList = formatListForDays(newTransactionList)
+            //Convert to separate lists
+            for (i in daysTransactionList.indices) {
+                values.add(daysTransactionList[i].amount.toFloat())
+                labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
+            }
+            //Set the graph
+            setBarGraph(values, labels, R.color.cornflower)
+        } else{
+            //Same but for month, this can also probably be broken out to another function
+            currentCat = parent.getItemAtPosition(pos).toString()
+            //Order and format list by months
+            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val newTransactionList = sortTransactionList(filteredTransactionList)
+            val monthsTransactionList = formatListForMonths(newTransactionList)
+            //Convert to separate lists
+            for (i in monthsTransactionList.indices){
+                values.add(monthsTransactionList[i].amount.toFloat())
+                labels.add(monthsTransactionList[i].month)
+            }
+            //Set the bar graph
+            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
         }
 
     }
@@ -125,8 +157,12 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     //Sorts the transaction list by year -> month -> day
     fun sortTransactionList(transactions : List<Transaction>) : MutableList<Transaction> {
-        return transactions.sortedWith(compareBy<Transaction> {it.year}.thenBy {it.month}
-            .thenBy {it.day}) as MutableList<Transaction>
+        val newTransactionList = transactions.sortedWith(compareBy<Transaction> {it.year}.thenBy {it.month}
+            .thenBy {it.day})
+        if(newTransactionList.isEmpty()){
+            return noDataList() //If empty return this list instead (prevents crash)
+        }
+        return newTransactionList as MutableList<Transaction>
     }
 
     //Adds all values for days together
@@ -169,7 +205,11 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         if(cat.equals("All")){
             return transactions
         }else{
-            return transactions.filter { it.category == cat }.toMutableList()
+            val sortedList = transactions.filter { it.category == cat }
+            if(sortedList.isEmpty()){
+                return noDataList() //If empty return this list instead (prevents crash)
+            }
+            return sortedList.toMutableList()
         }
     }
 
@@ -188,7 +228,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
         //Put all floats in entryValues in the entry list
         for (i in entryValues.indices){
-            entries.add(BarEntry(i.toFloat(),entryValues[i]))
+            entries.add(BarEntry(i.toFloat(),entryValues[i]/100)) //divide by 100 because of öre
         }
 
         //Make a dataset using the entries list
@@ -234,4 +274,11 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.invalidate()
     }
 
+    //Returns an empty transaction list (used to handle cases with no data)
+    fun noDataList() : MutableList<Transaction>{
+        val noDataTransactionList : MutableList<Transaction> =
+            ArrayList()
+        noDataTransactionList.add(Transaction(0))
+        return noDataTransactionList
+    }
 }
