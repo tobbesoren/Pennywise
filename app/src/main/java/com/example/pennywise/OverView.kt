@@ -7,32 +7,38 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
+import com.example.pennywise.databinding.ActivityOverViewBinding
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
 
 class OverView : AppCompatActivity() {
 
     private lateinit var expensePresentView: TextView
     private lateinit var expenseTextView: TextView
 
+    private lateinit var binding: ActivityOverViewBinding
+
     private val uid = Firebase.auth.uid.toString()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_over_view)
+        binding = ActivityOverViewBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         expensePresentView = findViewById(R.id.expenseTextView)
         expenseTextView = findViewById(R.id.expense2TextView)
 
         loadData(uid)
 
-        // Set up the toolbar.
+//         Set up the toolbar.
 //        (activity as AppCompatActivity).setSupportActionBar(view.app_bar)
 
         // scanExpenseFAB functionality
@@ -57,9 +63,10 @@ class OverView : AppCompatActivity() {
         }
 
         // fragment Button
-        val fragmentButton = findViewById<Button>(R.id.showFragmentButton)
-        fragmentButton.setOnClickListener{
-            showFragment()
+        val calendarFragmentIB = findViewById<ImageButton>(R.id.calendarIB)
+        calendarFragmentIB.setOnClickListener{
+            showDateRangePicker()
+//            showFragment()
         }
 
     }
@@ -68,7 +75,7 @@ class OverView : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_pennywise, menu)
         return true
     }
-
+    // functionality for expenseTextView
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.logout -> {
@@ -144,22 +151,37 @@ class OverView : AppCompatActivity() {
 
     }
 
-    // FRAGMENT UP FOR DIBBS
-    private fun showFragment() {
-        val fragment = supportFragmentManager.findFragmentByTag("addExpenseFragment")
+    private fun showDateRangePicker() {
 
+        val dateRangePicker = MaterialDatePicker.Builder
+            .dateRangePicker()
+            .setTitleText("Select Date")
+            .build()
 
-        if (fragment != null) {
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.remove(fragment)
-            transaction.commit()
+        dateRangePicker.show(
+            supportFragmentManager,
+            "date_range_picker"
+        )
 
-        } else {
-            val fragmentUpForDibbs = FragmentUpForDibbs()
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(R.id.container, fragmentUpForDibbs, "addExpenseFragment")
-            transaction.commit()
+        dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
+
+            val startDate = datePicked.first
+            val endDate = datePicked.second
+
+            binding.fromTW.text = "${convertLongToDate(startDate)}"
+            binding.toTW.text = "${convertLongToDate(endDate)}"
         }
+    }
+
+    private fun convertLongToDate(time:Long):String {
+
+        val date = java.util.Date(time)
+        val format = SimpleDateFormat(
+            "dd-MM/yy",
+            Locale.getDefault()
+        )
+
+        return format.format(date)
     }
 
 }
