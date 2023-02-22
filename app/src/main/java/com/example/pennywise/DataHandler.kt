@@ -31,7 +31,7 @@ object DataHandler {
         Firebase.firestore.collection("users/${userID}/transactions")
             .get()
             .addOnSuccessListener { documentSnapShot ->
-            makeListAndBalance(documentSnapShot)
+            updateList(documentSnapShot)
             logData()
         }.addOnFailureListener { exception ->
                 Log.d("!!!!", exception.toString())
@@ -39,19 +39,28 @@ object DataHandler {
     }
 
 
-    fun makeListAndBalance(documentSnapShot: QuerySnapshot) {
+    fun updateList(documentSnapShot: QuerySnapshot) {
         allTransactions.clear()
-        var sum : Long = 0
         for (document in documentSnapShot.documents) {
             val item = document.toObject<Transaction>()
             if (item != null) {
                 allTransactions.add(item)
-                sum += item.amount
             }
         }
         allTransactions.sortByDescending { it.timeStamp }
-        balance.dollars = sum / 100
-        balance.cents = sum % 100
+    }
+
+    fun filteredList(startDate: String, endDate: String, category: String)
+    : MutableList<Transaction> {
+        val filteredList = mutableListOf<Transaction>()
+        for(transaction in allTransactions){
+            if(transaction.timeStamp.slice(0..10) in startDate..endDate
+                && (transaction.category == category || category == "All")) {
+                filteredList.add(transaction)
+            }
+        }
+        Log.d("!!!", filteredList.toString())
+        return filteredList
     }
 
     fun logData() {
@@ -73,4 +82,16 @@ object DataHandler {
 
         return balance
     }
+
+    fun listToBalance(transactions: MutableList<Transaction>) : Balance {
+        var sum : Long = 0
+        var balance = Balance()
+        for (transaction in transactions) sum += transaction.amount
+
+        balance.setAmount(sum)
+
+        return balance
+    }
+
+
 }
