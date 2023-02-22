@@ -1,6 +1,5 @@
 package com.example.pennywise
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -29,12 +28,15 @@ class OverView : AppCompatActivity() {
 
     private val uid = Firebase.auth.uid.toString()
 
-    lateinit var categorySelected : String
-    lateinit var transactionRange : MutableList<Transaction>
-    var startDate = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).toString()
-    var endDate = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).toString()
+    //These variables keep track of the selected date range and category, to help populate the
+    //filteredTransactions list.
+    private lateinit var categorySelected : String
+    private var startDate = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).toString()
+    private var endDate = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).toString()
+    //This holds the currently selected items to show. Filtered by date and category.
+    private lateinit var filteredTransactions : MutableList<Transaction>
 
-    @SuppressLint("MissingInflatedId")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         categorySelected = getString(R.string.all)
 
@@ -48,7 +50,7 @@ class OverView : AppCompatActivity() {
         binding.fromTW.text = startDate.toString()
         binding.toTW.text = endDate.toString()
 
-        loadData(uid)
+        loadDataUpdateMoneyText(uid)
 
 //         Set up the toolbar.
 //        (activity as AppCompatActivity).setSupportActionBar(view.app_bar)
@@ -88,6 +90,8 @@ class OverView : AppCompatActivity() {
         return true
     }
     // functionality for expenseTextView
+    //This is an abomination and needs to be fixed!!!
+    // with kind regards, Tobbe the Hack
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.logout -> {
@@ -98,58 +102,58 @@ class OverView : AppCompatActivity() {
             } R.id.allMenu -> {
                 expenseTextView.setText(R.string.expenses)
                 categorySelected = getString(R.string.all)
-                transactionRange = DataHandler.filteredList(startDate,
+                filteredTransactions = DataHandler.filteredList(startDate,
                     endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } R.id.amusementMenu -> {
                 expenseTextView.setText(R.string.amusement)
                 categorySelected = getString(R.string.amusement)
-                transactionRange = DataHandler.filteredList(startDate,
+                filteredTransactions = DataHandler.filteredList(startDate,
                     endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } R.id.householdMenu -> {
                 expenseTextView.setText(R.string.household)
                 categorySelected = getString(R.string.household)
-                transactionRange = DataHandler.filteredList(startDate,
+                filteredTransactions = DataHandler.filteredList(startDate,
                     endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } R.id.transportationMenu -> {
                 expenseTextView.setText(R.string.transportation)
                 categorySelected = getString(R.string.transportation)
-                transactionRange = DataHandler.filteredList(startDate,
+                filteredTransactions = DataHandler.filteredList(startDate,
                     endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } R.id.diningMenu -> {
                 expenseTextView.setText(R.string.dining)
                 categorySelected = getString(R.string.dining)
-                transactionRange = DataHandler.filteredList(startDate,
+                filteredTransactions = DataHandler.filteredList(startDate,
                     endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } R.id.hcWellnMenu -> {
                 expenseTextView.setText(R.string.healthcare_wellness)
                 categorySelected = getString(R.string.healthcare_wellness)
-                transactionRange = DataHandler.filteredList(startDate,
+                filteredTransactions = DataHandler.filteredList(startDate,
                     endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } R.id.groceriesMenu -> {
                 expenseTextView.setText(R.string.groceries)
                 categorySelected = getString(R.string.groceries)
-                transactionRange = DataHandler.filteredList(startDate,
+                filteredTransactions = DataHandler.filteredList(startDate,
                     endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } R.id.otherMenu -> {
                 expenseTextView.setText(R.string.other)
                 categorySelected = getString(R.string.other)
-                transactionRange = DataHandler.filteredList(startDate,
+                filteredTransactions = DataHandler.filteredList(startDate,
                     endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } else -> super.onOptionsItemSelected(item)
 
@@ -168,24 +172,38 @@ class OverView : AppCompatActivity() {
      */
     override fun onResume() {
         super.onResume()
-        loadData(uid)
+        loadDataUpdateMoneyText(uid)
     }
-    private fun loadData(userID: String) {
+
+
+    /**
+     * This is called onCreate and onResume.
+     *Loads data from Firestore. Calls DataHandler.updateList to make the allTransactions list.
+     * Creates the filteredTransactions list by calling DataHandler.filteredList with the selected
+     * arguments(startDate, endDate and category). Sets ExpensePresentView to the correct amount
+     * by calling setMoneyText with the Balance gotten from DataHandler.listToBalance, using
+     * filteredTransactions. Yeah, it's a mouthful.
+     */
+    private fun loadDataUpdateMoneyText(userID: String) {
         Firebase.firestore.collection("users/${userID}/transactions")
             .get()
             .addOnSuccessListener { documentSnapShot ->
                 DataHandler.updateList(documentSnapShot)
-                transactionRange = DataHandler.filteredList(
+                filteredTransactions = DataHandler.filteredList(
                     startDate,
                     endDate,
                     categorySelected)
-                setMoneyText(DataHandler.listToBalance(transactionRange))
+                setMoneyText(DataHandler.listToBalance(filteredTransactions))
 
             }.addOnFailureListener { exception ->
                 Log.d("!!!!", exception.toString())
             }
     }
 
+
+    /**
+     * This sets the expensePresentView with the current sum of the given Balance.
+     */
     private fun setMoneyText(amount : Balance) {
         expensePresentView.text = amount.balanceString(this)
         DataHandler.logData()
@@ -210,9 +228,9 @@ class OverView : AppCompatActivity() {
 
             binding.fromTW.text = startDate
             binding.toTW.text = endDate
-            transactionRange = DataHandler.filteredList(startDate,
+            filteredTransactions = DataHandler.filteredList(startDate,
             endDate, categorySelected)
-            val currentBalance = DataHandler.listToBalance(transactionRange)
+            val currentBalance = DataHandler.listToBalance(filteredTransactions)
             setMoneyText(currentBalance)
         }
     }
