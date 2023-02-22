@@ -259,12 +259,17 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.data = barData
 
         //Changing some style settings
-        chart.setDrawGridBackground(false)
-        chart.setDrawBorders(true)
-        chart.setBorderWidth(1f)
-        chart.getLegend().setEnabled(false)
-        chart.setAutoScaleMinMaxEnabled(true)
-        chart.setDoubleTapToZoomEnabled(false)
+        chart.setDrawGridBackground(false) //Hide grid-pattern behind the chart
+        chart.setDrawBorders(true) //Show the chart's borders
+        chart.setBorderWidth(1f) //Set the border to width 1
+        chart.getLegend().setEnabled(false) //Hide an unneeded description under the chart
+        chart.setDoubleTapToZoomEnabled(false) //Disable zooming into the chart by tapping
+        chart.setVisibleXRangeMaximum(6f) //Show no more than 6 bars (this enables scrolling if there are more)
+        //chart.setVisibleXRangeMinimum(6f) //Always show at least room for 6 bars
+        // (makes the bar width static, but centers the bars to the left, which looks odd)
+        chart.setAutoScaleMinMaxEnabled(false) //Disable that the chart "jumps" as you scroll
+        chart.moveViewToX(entries.size.toFloat())
+
 
         //Remove small description in the corner
         chart.getDescription().setText("")
