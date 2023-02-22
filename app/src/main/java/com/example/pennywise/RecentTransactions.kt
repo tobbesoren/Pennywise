@@ -29,7 +29,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
         val values : MutableList<Float> = ArrayList()
         val labels : MutableList<String> = ArrayList()
-        //If the spinner option selected was "Days"
+        //CASE: "Days" selected, current category can be retrieved from currentCat
         if(parent.getItemAtPosition(pos).equals("Days")){
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
@@ -44,6 +44,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             //Set the graph
             setBarGraph(values, labels, R.color.cornflower)
+        //CASE: "Months" selected, current category can be retreived from currentCat
         } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
@@ -58,6 +59,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             //Set the bar graph
             setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
+        //CASE: A category has been selected, and "Days" has previously been selected
         } else if(currentInterval == "Days") {
             //Set currentCat to whichever category is chosen
             currentCat = parent.getItemAtPosition(pos).toString()
@@ -74,6 +76,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             //Set the graph
             setBarGraph(values, labels, R.color.cornflower)
+        //CASE: A category has been selected, and "Months" has previously been selected
         } else{
             //Same but for month, this can also probably be broken out to another function
             currentCat = parent.getItemAtPosition(pos).toString()
@@ -261,6 +264,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.setBorderWidth(1f)
         chart.getLegend().setEnabled(false)
         chart.setAutoScaleMinMaxEnabled(true)
+        chart.setDoubleTapToZoomEnabled(false)
 
         //Remove small description in the corner
         chart.getDescription().setText("")
