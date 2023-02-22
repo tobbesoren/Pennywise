@@ -268,7 +268,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         //chart.setVisibleXRangeMinimum(6f) //Always show at least room for 6 bars
         // (makes the bar width static, but centers the bars to the left, which looks odd)
         chart.setAutoScaleMinMaxEnabled(false) //Disable that the chart "jumps" as you scroll
-        chart.moveViewToX(entries.size.toFloat())
+        chart.moveViewToX(entries.size.toFloat()) //Center the view towards the right
 
 
         //Remove small description in the corner
