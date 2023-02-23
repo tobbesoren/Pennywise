@@ -138,10 +138,10 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         ArrayAdapter.createFromResource(
             this,
             R.array.days_months_array,
-            android.R.layout.simple_spinner_item
+            android.R.layout.simple_spinner_dropdown_item
         ).also{ adapter ->
             // specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // apply the adapter to the spinner
             spinner.adapter = adapter
         }
@@ -151,9 +151,9 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         ArrayAdapter.createFromResource(
             this,
             R.array.category_array,
-            android.R.layout.simple_spinner_item
+            android.R.layout.simple_spinner_dropdown_item
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner2.adapter = adapter
         }
     }
