@@ -46,7 +46,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             //Set the graph
             setBarGraph(values, labels, R.color.cornflower)
-        //CASE: "Months" selected, current category can be retreived from currentCat
+        //CASE: "Months" selected, current category can be retrieved from currentCat
         } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
