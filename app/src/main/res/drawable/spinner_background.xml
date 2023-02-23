@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- To change a spinner's appearance, but it doesn't look great -->
     <item><layer-list>
 
         <item>
