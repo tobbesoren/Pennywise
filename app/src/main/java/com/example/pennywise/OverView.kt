@@ -54,6 +54,12 @@ class OverView : AppCompatActivity() {
 
 //         Set up the toolbar.
 //        (activity as AppCompatActivity).setSupportActionBar(view.app_bar)
+        binding.fromTW.setOnClickListener {
+            showDateRangePicker()
+        }
+        binding.toTW.setOnClickListener {
+            showDateRangePicker()
+        }
 
         // scanExpenseFAB functionality
         val scanExpenseFAB = findViewById<FloatingActionButton>(R.id.scanExpenseFAB)
@@ -75,14 +81,6 @@ class OverView : AppCompatActivity() {
             val intent = Intent(this, RecentTransactions::class.java)
             startActivity(intent)
         }
-
-        // fragment Button
-        val calendarFragmentIB = findViewById<ImageButton>(R.id.calendarIB)
-        calendarFragmentIB.setOnClickListener{
-            showDateRangePicker()
-//            showFragment()
-        }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
