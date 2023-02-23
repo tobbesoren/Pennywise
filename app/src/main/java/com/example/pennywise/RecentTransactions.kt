@@ -17,12 +17,14 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     //Main data
     var transactionList : List<Transaction> = DataHandler.allTransactions
-    //Which category is being viewed?
+    //What is the category spinner currently set to?
     var currentCat : String = "All"
+    //What is the days/months spinner currently set to?
     var currentInterval : String = "Days"
 
 
-    //For spinners, I believe this can be broken down into smaller functions
+    //For spinners, gets called when option is selected by user.
+    // I believe this can be broken down into smaller functions
     override fun onItemSelected(parent: AdapterView<*>, View: View?, pos: Int, id: Long){
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
@@ -44,7 +46,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             //Set the graph
             setBarGraph(values, labels, R.color.cornflower)
-        //CASE: "Months" selected, current category can be retreived from currentCat
+        //CASE: "Months" selected, current category can be retrieved from currentCat
         } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
@@ -116,32 +118,30 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
 
-        //Just giving the graph some initial, mock-values
+        //Giving the graph some initial values, this will be "overridden" once the spinners load
         val values : MutableList<Float> = ArrayList()
         val labels : MutableList<String> = ArrayList()
 
         val newTransactionList = sortTransactionList(transactionList)
-        //val daysTransactionList = formatListForDays(newTransactionList)
         val daysTransactionList = formatListForMonths(newTransactionList)
 
         for (i in daysTransactionList.indices){
             values.add(daysTransactionList[i].amount.toFloat())
             labels.add(daysTransactionList[i].timeStamp)
         }
-
         setBarGraph(values, labels, 0)
 
-        //Spinner stuff
+        //Setting up the spinners
         val spinner : Spinner = findViewById(R.id.spinner1)
         spinner.onItemSelectedListener = this
         // Create an ArrayAdapter using a string array and the default spinner layout
         ArrayAdapter.createFromResource(
             this,
             R.array.days_months_array,
-            android.R.layout.simple_spinner_item
+            android.R.layout.simple_spinner_dropdown_item
         ).also{ adapter ->
             // specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // apply the adapter to the spinner
             spinner.adapter = adapter
         }
@@ -151,9 +151,9 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         ArrayAdapter.createFromResource(
             this,
             R.array.category_array,
-            android.R.layout.simple_spinner_item
+            android.R.layout.simple_spinner_dropdown_item
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner2.adapter = adapter
         }
     }
@@ -171,35 +171,45 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     //Adds all values for days together
     fun formatListForDays(transactions : List<Transaction>) : MutableList<Transaction>{
         val formattedList : MutableList<Transaction> = ArrayList()
+        //For every transaction in the transaction list
         for (i in transactions.indices){
             if (formattedList.isEmpty()){
                 formattedList.add(transactions[i]) //If this is the first call, just add it
+            //If the date of this transaction is the same as the previous one added, "merge" them
             } else if(formattedList.last().day.equals(transactions[i].day)
                 && formattedList.last().month.equals(transactions[i].month)
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
+
+            //If the date differs from the previous one added, add as new entry
             } else{
                 formattedList.add(transactions[i])
             }
         }
+        //Return the new list
         return formattedList
     }
 
     //Adds all values for months together (only one line differs.. can these be combined?)
     fun formatListForMonths(transactions : List<Transaction>) : MutableList<Transaction>{
         val formattedList : MutableList<Transaction> = ArrayList()
+        //For every transaction in the transaction list
         for (i in transactions.indices){
             if (formattedList.isEmpty()){
                 formattedList.add(transactions[i]) //If this is the first call, just add it
+            //If the month+year of this transaction is the same as the previous one added, "merge" them
             } else if(formattedList.last().month.equals(transactions[i].month)
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
+
+            //If the month+year differs from the previous one added, add as new entry
             } else{
                 formattedList.add(transactions[i])
             }
         }
+        //Return the new list
         return formattedList
     }
 
@@ -269,6 +279,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         // (makes the bar width static, but centers the bars to the left, which looks odd)
         chart.setAutoScaleMinMaxEnabled(false) //Disable that the chart "jumps" as you scroll
         chart.moveViewToX(entries.size.toFloat()) //Center the view towards the right
+        chart.zoomOut() //Zoom out in case the graph was previously zoomed in
 
 
         //Remove small description in the corner
