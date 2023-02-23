@@ -112,6 +112,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val adapter = TransactionRecyclerAdapter(this, DataHandler.allTransactions)
         recyclerView.adapter = adapter
 
+
         val returnButton = findViewById<ImageButton>(R.id.returnIB)
         returnButton.setOnClickListener {
             finish()

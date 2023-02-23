@@ -4,9 +4,9 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-//Maybe we should add more data here? I'm thinking:
-// -comment, to be able to add info about the transaction
-// -year, month, day - apart from the timestamp, to make searching easier (not sure about this)
+//Now we have a function in DataHandler to filter the allTransactions list, so maybe we don't need
+// .year, .month, .day and .time anymore. They are currently used by RecentTransactions to
+//populate the chart, so I won't remove them just yet.
 data class Transaction (val amount: Long = 0,
                         val category: String = "",
                         val timeStamp: String ="",

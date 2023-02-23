@@ -23,7 +23,7 @@ class AddTransactionActivity : AppCompatActivity() {
 
     private val uid = Firebase.auth.uid.toString()
 
-    @SuppressLint("MissingInflatedId")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_transaction)
@@ -53,11 +53,12 @@ class AddTransactionActivity : AppCompatActivity() {
         saveButton.setOnClickListener {
 
             val amount = convertAmount()
-
+            //make sure an amount is entered, otherwise there isn't a Transaction to add!
             if (amount <= 0) {
                 Toast.makeText(this, getString(R.string.fill_in_an_amount_to_save_transaction)
                     , Toast.LENGTH_LONG).show()
             } else {
+                //Here we create a Transaction based on the user input and save to Firestore.
                 val category = rButtonChecked()
                 val timeStamp: String = DateTimeFormatter
                     .ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -78,6 +79,7 @@ class AddTransactionActivity : AppCompatActivity() {
                     day,
                     time,
                     note)
+                //The addTransaction function in DataHandler is called.
                 DataHandler.addTransaction(uid, transaction)
                 Log.d("!!!", " transaction contains 1.Amount: ${transaction.amount}. " +
                         "2. Category: ${transaction.category}. " +
@@ -90,7 +92,8 @@ class AddTransactionActivity : AppCompatActivity() {
 
     /**
      * Converts the amount input from the edit text to cents. Replaces amount2()
-     * Returns a Long.
+     * Returns a Long. By saving the money data as integers, we avoid float errors, which would
+     * rapidly add up to show the wrong numbers.
      */
     private fun convertAmount(): Long {
 
@@ -116,21 +119,21 @@ class AddTransactionActivity : AppCompatActivity() {
         return radioButton.text.toString()
     }
 
-    /*
-    I found this solution on Stack Overflow - I don't fully understand it yet, but I'm
-    looking into it...
-     */
+
+
     /**
-     * Adds a DecimalLimiter to an EditText. Default value is 2 decimal places.
+     * Adds a DecimalLimiter to an EditText. Limits the number of decimals to two.
+     * If the user enters just a decimal delimiter and the cents, it will add a zero before the dot.
+     * Also prevents the user from entering anything but numbers and decimal delimiter.
      */
-    fun EditText.addDecimalLimiter(maxLimit: Int = 2) {
+    fun EditText.addDecimalLimiter() {
 
         this.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable?) {
                 val str = this@addDecimalLimiter.text!!.toString()
                 if (str.isEmpty()) return
-                val str2 = decimalLimiter(str, maxLimit)
+                val str2 = decimalLimiter(str, 2)
 
                 if (str2 != str) {
                     this@addDecimalLimiter.setText(str2)
