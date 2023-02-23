@@ -1,6 +1,5 @@
 package com.example.pennywise
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,9 +11,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class AddTransactionActivity : AppCompatActivity() {
 
@@ -29,11 +30,35 @@ class AddTransactionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_transaction)
 
+        var timeStamp: String = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss")
+            .withZone(ZoneOffset.systemDefault())
+            .format(Instant.now())
+
+        var dateOfTransactionSliced = timeStamp.slice(0..9)
+        var dateOfTransactionText = findViewById<TextView>(R.id.dateOfTransactionTV)
+        dateOfTransactionText.setText(dateOfTransactionSliced)
+
+
         radioGroup = findViewById(R.id.radio_group)
         amountEditText = findViewById(R.id.amountEditText)
         noteTextInput = findViewById(R.id.noteTextInput)
 
-        MaterialDatePicker.Builder.datePicker().build()
+        val builder : MaterialDatePicker.Builder<*> = MaterialDatePicker.Builder.datePicker()
+        builder.setTitleText("Select date of transaction")
+        val picker : MaterialDatePicker<*> = builder.build()
+
+        dateOfTransactionText.setOnClickListener {
+            picker.show(supportFragmentManager, picker.toString())
+        }
+
+        picker.addOnPositiveButtonClickListener { chosenDate ->
+
+            val datePicked = convertLongToDate(chosenDate.toString().toLong())
+            timeStamp = datePicked
+            dateOfTransactionText.setText(datePicked.slice(0..9))
+            Log.d("!!!", datePicked)
+        }
 
 
         // The amount transferred from CameraScannerActivity
@@ -63,10 +88,7 @@ class AddTransactionActivity : AppCompatActivity() {
             } else {
                 //Here we create a Transaction based on the user input and save to Firestore.
                 val category = rButtonChecked()
-                val timeStamp: String = DateTimeFormatter
-                    .ofPattern("yyyy-MM-dd HH:mm:ss")
-                    .withZone(ZoneOffset.systemDefault())
-                    .format(Instant.now())
+
                 val year: String = timeStamp.slice(0..3)
                 val month: String = timeStamp.slice(5..6)
                 val day: String = timeStamp.slice(8..9)
@@ -193,4 +215,15 @@ class AddTransactionActivity : AppCompatActivity() {
         }
         return rFinal
     }
+    private fun convertLongToDate(time:Long):String {
+
+        val date = Date(time)
+        val format = SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss",
+            Locale.getDefault()
+        )
+
+        return format.format(date)
+    }
+
 }
