@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
@@ -31,6 +32,8 @@ class AddTransactionActivity : AppCompatActivity() {
         radioGroup = findViewById(R.id.radio_group)
         amountEditText = findViewById(R.id.amountEditText)
         noteTextInput = findViewById(R.id.noteTextInput)
+
+        MaterialDatePicker.Builder.datePicker().build()
 
 
         // The amount transferred from CameraScannerActivity
