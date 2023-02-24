@@ -49,9 +49,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Order and format list by days
             //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            val newTransactionList = sortTransactionList(filteredTransactionList)
-            val daysTransactionList = formatListForDays(newTransactionList)
-            //Convert to separate lists
+            //val newTransactionList = sortTransactionList(filteredTransactionList)
+            val daysTransactionList = formatListForDays(filteredTransactionList.asReversed())
             for (i in daysTransactionList.indices){
                 values.add(daysTransactionList[i].amount.toFloat())
                 labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
@@ -65,8 +64,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Order and format list by months
             //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            val newTransactionList = sortTransactionList(filteredTransactionList)
-            val monthsTransactionList = formatListForMonths(newTransactionList)
+            //val newTransactionList = sortTransactionList(filteredTransactionList)
+            val monthsTransactionList = formatListForMonths(filteredTransactionList.asReversed())
             //Convert to separate lists
             for (i in monthsTransactionList.indices){
                 values.add(monthsTransactionList[i].amount.toFloat())
@@ -83,8 +82,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //val filteredTransactionList =
             //    sortListOnCategory(transactionList.toMutableList(), currentCat)
             val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            val newTransactionList = sortTransactionList(filteredTransactionList)
-            val daysTransactionList = formatListForDays(newTransactionList)
+            //val newTransactionList = sortTransactionList(filteredTransactionList)
+            val daysTransactionList = formatListForDays(filteredTransactionList.asReversed())
             //Convert to separate lists
             for (i in daysTransactionList.indices) {
                 values.add(daysTransactionList[i].amount.toFloat())
@@ -99,8 +98,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Order and format list by months
             //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            val newTransactionList = sortTransactionList(filteredTransactionList)
-            val monthsTransactionList = formatListForMonths(newTransactionList)
+            //val newTransactionList = sortTransactionList(filteredTransactionList)
+            val monthsTransactionList = formatListForMonths(filteredTransactionList.asReversed())
             //Convert to separate lists
             for (i in monthsTransactionList.indices){
                 values.add(monthsTransactionList[i].amount.toFloat())
@@ -144,8 +143,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val values : MutableList<Float> = ArrayList()
         val labels : MutableList<String> = ArrayList()
 
-        val newTransactionList = sortTransactionList(transactionList)
-        val daysTransactionList = formatListForMonths(newTransactionList)
+        val daysTransactionList = formatListForMonths(transactionList)
 
         for (i in daysTransactionList.indices){
             values.add(daysTransactionList[i].amount.toFloat())
@@ -181,6 +179,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     }
 
     //Sorts the transaction list by year -> month -> day
+    //NO LONGER USED! As DataHandler sorts it. Can probably be removed
     fun sortTransactionList(transactions : List<Transaction>) : MutableList<Transaction> {
         val newTransactionList = transactions.sortedWith(compareBy<Transaction> {it.year}.thenBy {it.month}
             .thenBy {it.day})
@@ -235,7 +234,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         return formattedList
     }
 
-    //Filter the list based on category
+    //Filter the list based on category,
+    //NO LONGER USED! Can probably be removed
     fun sortListOnCategory(transactions : MutableList<Transaction>, cat : String) : MutableList<Transaction>{
         if(cat.equals("All")){
             return transactions
@@ -350,6 +350,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     }
 
     //Returns an empty transaction list (used to handle cases with no data)
+    //NO LONGER USED! If the sortTransactionList and sortListOnCategory are removed, this can be too
     fun noDataList() : MutableList<Transaction>{
         val noDataTransactionList : MutableList<Transaction> =
             ArrayList()
