@@ -47,7 +47,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
             //Order and format list by days
-            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
             val newTransactionList = sortTransactionList(filteredTransactionList)
             val daysTransactionList = formatListForDays(newTransactionList)
             //Convert to separate lists
@@ -62,7 +63,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
             //Order and format list by months
-            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
             val newTransactionList = sortTransactionList(filteredTransactionList)
             val monthsTransactionList = formatListForMonths(newTransactionList)
             //Convert to separate lists
@@ -78,8 +80,9 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             currentCat = parent.getItemAtPosition(pos).toString()
             //Run the same code as in the "days" if-statement.. this could probably be broken out
             //Order and format list by days
-            val filteredTransactionList =
-                sortListOnCategory(transactionList.toMutableList(), currentCat)
+            //val filteredTransactionList =
+            //    sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
             val newTransactionList = sortTransactionList(filteredTransactionList)
             val daysTransactionList = formatListForDays(newTransactionList)
             //Convert to separate lists
@@ -94,7 +97,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Same but for month, this can also probably be broken out to another function
             currentCat = parent.getItemAtPosition(pos).toString()
             //Order and format list by months
-            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
+            val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
             val newTransactionList = sortTransactionList(filteredTransactionList)
             val monthsTransactionList = formatListForMonths(newTransactionList)
             //Convert to separate lists
@@ -265,6 +269,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
     }
 
+    //Same as in overview, credit to Philip
     private fun convertLongToDate(time:Long):String {
 
         val date = java.util.Date(time)
