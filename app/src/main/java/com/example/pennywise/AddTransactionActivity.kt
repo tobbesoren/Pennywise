@@ -1,11 +1,14 @@
 package com.example.pennywise
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pennywise.databinding.ActivityAddTransactionBinding
+import com.example.pennywise.databinding.ActivityOverViewBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
@@ -24,12 +27,30 @@ class AddTransactionActivity : AppCompatActivity() {
     private lateinit var radioGroup: RadioGroup
     private lateinit var noteTextInput: TextInputLayout
 
+    private lateinit var binding: ActivityAddTransactionBinding
     private val uid = Firebase.auth.uid.toString()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_transaction)
+
+        binding = ActivityAddTransactionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.bottomNavigationView.selectedItemId = R.id.add_menu_button
+        binding.bottomNavigationView.setOnItemSelectedListener {
+
+            when(it.itemId){
+
+                R.id.overview_menu_button -> goToOverViewActivity()
+                R.id.recent_menu_button -> goToRecentTransactionActivity()
+                else ->{
+
+                }
+            }
+            true
+        }
 
         var timeStamp: String = DateTimeFormatter
             .ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -114,6 +135,15 @@ class AddTransactionActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    private fun goToOverViewActivity () {
+        val intent = Intent(this, OverView::class.java)
+        startActivity(intent)
+    }
+    private fun goToRecentTransactionActivity () {
+        val intent = Intent(this, RecentTransactions::class.java)
+        startActivity(intent)
     }
 
 
