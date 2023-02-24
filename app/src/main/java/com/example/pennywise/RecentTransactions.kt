@@ -7,11 +7,18 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pennywise.databinding.ActivityRecentTransactionsBinding
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -21,6 +28,10 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     var currentCat : String = "All"
     //What is the days/months spinner currently set to?
     var currentInterval : String = "Days"
+
+    //For dates
+    private var startDate = LocalDate.now().with(TemporalAdjusters.firstDayOfYear()).toString()
+    private var endDate = LocalDate.now().with(TemporalAdjusters.lastDayOfYear()).toString()
 
 
     //For spinners, gets called when option is selected by user.
@@ -116,6 +127,12 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val returnButton = findViewById<ImageButton>(R.id.returnIB)
         returnButton.setOnClickListener {
             finish()
+        }
+
+
+        val calendarButton = findViewById<ImageButton>(R.id.calendarButtonRT)
+        calendarButton.setOnClickListener{
+            showDateRangePicker()
         }
 
 
@@ -225,6 +242,38 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             return sortedList.toMutableList()
         }
+    }
+
+    //Show the date picker (mostly same as in overview)
+    private fun showDateRangePicker() {
+
+        val dateRangePicker = MaterialDatePicker.Builder
+            .dateRangePicker()
+            .setTitleText("Select Date")
+            .build()
+
+        dateRangePicker.show(
+            supportFragmentManager,
+            "date_range_picker"
+        )
+
+        dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
+
+            startDate = convertLongToDate(datePicked.first)
+            endDate = convertLongToDate(datePicked.second)
+
+        }
+    }
+
+    private fun convertLongToDate(time:Long):String {
+
+        val date = java.util.Date(time)
+        val format = SimpleDateFormat(
+            "yyyy-MM-dd",
+            Locale.getDefault()
+        )
+
+        return format.format(date)
     }
 
     //Init or change the graph, give it a list of floats, a list of strings (labels)
