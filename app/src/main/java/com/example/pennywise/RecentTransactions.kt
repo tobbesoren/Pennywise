@@ -15,6 +15,12 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -27,82 +33,29 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     //What is the days/months spinner currently set to?
     var currentInterval : String = "Days"
 
+    //For dates
+    private var startDate = LocalDate.now().with(TemporalAdjusters.firstDayOfYear()).toString()
+    private var endDate = LocalDate.now().with(TemporalAdjusters.lastDayOfYear()).toString()
+
 
     //For spinners, gets called when option is selected by user.
-    // I believe this can be broken down into smaller functions
     override fun onItemSelected(parent: AdapterView<*>, View: View?, pos: Int, id: Long){
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
 
-        val values : MutableList<Float> = ArrayList()
-        val labels : MutableList<String> = ArrayList()
-        //CASE: "Days" selected, current category can be retrieved from currentCat
-        if(parent.getItemAtPosition(pos).equals("Days")){
+        if(parent.getItemAtPosition(pos) == "Days" || parent.getItemAtPosition(pos) == "Months"){
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
-            //Order and format list by days
-            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
-            val newTransactionList = sortTransactionList(filteredTransactionList)
-            val daysTransactionList = formatListForDays(newTransactionList)
-            //Convert to separate lists
-            for (i in daysTransactionList.indices){
-                values.add(daysTransactionList[i].amount.toFloat())
-                labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
-            }
-            //Set the graph
-            setBarGraph(values, labels, R.color.cornflower)
-        //CASE: "Months" selected, current category can be retrieved from currentCat
-        } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
-            //Set currentInterval to chosen spinner option
-            currentInterval = parent.getItemAtPosition(pos).toString()
-            //Order and format list by months
-            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
-            val newTransactionList = sortTransactionList(filteredTransactionList)
-            val monthsTransactionList = formatListForMonths(newTransactionList)
-            //Convert to separate lists
-            for (i in monthsTransactionList.indices){
-                values.add(monthsTransactionList[i].amount.toFloat())
-                labels.add(monthsTransactionList[i].month)
-            }
-            //Set the bar graph
-            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
-        //CASE: A category has been selected, and "Days" has previously been selected
-        } else if(currentInterval == "Days") {
-            //Set currentCat to whichever category is chosen
-            currentCat = parent.getItemAtPosition(pos).toString()
-            //Run the same code as in the "days" if-statement.. this could probably be broken out
-            //Order and format list by days
-            val filteredTransactionList =
-                sortListOnCategory(transactionList.toMutableList(), currentCat)
-            val newTransactionList = sortTransactionList(filteredTransactionList)
-            val daysTransactionList = formatListForDays(newTransactionList)
-            //Convert to separate lists
-            for (i in daysTransactionList.indices) {
-                values.add(daysTransactionList[i].amount.toFloat())
-                labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
-            }
-            //Set the graph
-            setBarGraph(values, labels, R.color.cornflower)
-        //CASE: A category has been selected, and "Months" has previously been selected
+            updateGraphWithSorting()
         } else{
-            //Same but for month, this can also probably be broken out to another function
+            //Set the current category to chosen spinner option
             currentCat = parent.getItemAtPosition(pos).toString()
-            //Order and format list by months
-            val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
-            val newTransactionList = sortTransactionList(filteredTransactionList)
-            val monthsTransactionList = formatListForMonths(newTransactionList)
-            //Convert to separate lists
-            for (i in monthsTransactionList.indices){
-                values.add(monthsTransactionList[i].amount.toFloat())
-                labels.add(monthsTransactionList[i].month)
-            }
-            //Set the bar graph
-            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
+            updateGraphWithSorting()
         }
 
     }
     override fun onNothingSelected(parent:AdapterView<*>){
-        //Another interface callback
+        //Not used in this activity, but needs to be overridden
     }
 
 
@@ -142,12 +95,17 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
 
+        val calendarButton = findViewById<ImageButton>(R.id.calendarButtonRT)
+        calendarButton.setOnClickListener{
+            showDateRangePicker()
+        }
+
+
         //Giving the graph some initial values, this will be "overridden" once the spinners load
         val values : MutableList<Float> = ArrayList()
         val labels : MutableList<String> = ArrayList()
 
-        val newTransactionList = sortTransactionList(transactionList)
-        val daysTransactionList = formatListForMonths(newTransactionList)
+        val daysTransactionList = formatListForMonths(transactionList)
 
         for (i in daysTransactionList.indices){
             values.add(daysTransactionList[i].amount.toFloat())
@@ -194,6 +152,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     }
 
     //Sorts the transaction list by year -> month -> day
+    //NO LONGER USED! As DataHandler sorts it. Can probably be removed
     fun sortTransactionList(transactions : List<Transaction>) : MutableList<Transaction> {
         val newTransactionList = transactions.sortedWith(compareBy<Transaction> {it.year}.thenBy {it.month}
             .thenBy {it.day})
@@ -216,6 +175,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
+                // It basically replaces the last transaction in the list with a new one with the amounts added together
 
             //If the date differs from the previous one added, add as new entry
             } else{
@@ -238,6 +198,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
+                // It basically replaces the last transaction in the list with a new one with the amounts added together
 
             //If the month+year differs from the previous one added, add as new entry
             } else{
@@ -248,7 +209,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         return formattedList
     }
 
-    //Filter the list based on category
+    //Filter the list based on category,
+    //NO LONGER USED! Can probably be removed
     fun sortListOnCategory(transactions : MutableList<Transaction>, cat : String) : MutableList<Transaction>{
         if(cat.equals("All")){
             return transactions
@@ -259,6 +221,40 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             }
             return sortedList.toMutableList()
         }
+    }
+
+    //Show the date picker (mostly same as in overview)
+    private fun showDateRangePicker() {
+
+        val dateRangePicker = MaterialDatePicker.Builder
+            .dateRangePicker()
+            .setTitleText("Select Date")
+            .build()
+
+        dateRangePicker.show(
+            supportFragmentManager,
+            "date_range_picker"
+        )
+
+        dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
+
+            startDate = convertLongToDate(datePicked.first)
+            endDate = convertLongToDate(datePicked.second)
+            updateGraphWithSorting()
+
+        }
+    }
+
+    //Same as in overview, credit to Philip
+    private fun convertLongToDate(time:Long):String {
+
+        val date = java.util.Date(time)
+        val format = SimpleDateFormat(
+            "yyyy-MM-dd",
+            Locale.getDefault()
+        )
+
+        return format.format(date)
     }
 
     //Init or change the graph, give it a list of floats, a list of strings (labels)
@@ -329,7 +325,39 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.invalidate()
     }
 
+    //Sorts everything in accordance to the spinners, and then runs setBarGraph
+    fun updateGraphWithSorting(){
+        //Get list filtered on date and category
+        val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
+        //Add the days, or months, together
+        val formattedTransactionList : List<Transaction>
+        if(currentInterval == "Days"){
+            formattedTransactionList = formatListForDays(filteredTransactionList.asReversed())
+        } else{
+            formattedTransactionList = formatListForMonths(filteredTransactionList.asReversed())
+        }
+        //Convert to separate lists
+        val values : MutableList<Float> = ArrayList()
+        val labels : MutableList<String> = ArrayList()
+        for (i in formattedTransactionList.indices){
+            values.add(formattedTransactionList[i].amount.toFloat())
+            labels.add(formattedTransactionList[i].month)
+        }
+        //To fix no-data bug, add a zero amount transaction in case there's no data
+        if(values.isEmpty()){
+            values.add(0f)
+            labels.add("")
+        }
+        //Set the bar graph
+        if(currentInterval == "Days"){
+            setBarGraph(values, labels, ContextCompat.getColor(this, R.color.cornflower))
+        } else{
+            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
+        }
+    }
+
     //Returns an empty transaction list (used to handle cases with no data)
+    //NO LONGER USED! If the sortTransactionList and sortListOnCategory are removed, this can be too
     fun noDataList() : MutableList<Transaction>{
         val noDataTransactionList : MutableList<Transaction> =
             ArrayList()
