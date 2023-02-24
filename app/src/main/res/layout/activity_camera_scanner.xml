@@ -68,7 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
-        app:srcCompat="@drawable/baseline_library_add_24" />
+        app:srcCompat="@drawable/ic_add" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageIv"

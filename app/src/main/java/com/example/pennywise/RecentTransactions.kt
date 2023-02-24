@@ -1,5 +1,6 @@
 package com.example.pennywise
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -7,6 +8,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pennywise.databinding.ActivityOverViewBinding
 import com.example.pennywise.databinding.ActivityRecentTransactionsBinding
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
@@ -21,6 +23,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+
+    private lateinit var binding : ActivityRecentTransactionsBinding
 
     //Main data
     var transactionList : List<Transaction> = DataHandler.allTransactions
@@ -58,6 +62,24 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recent_transactions)
+
+        binding = ActivityRecentTransactionsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.bottomNavigationView.selectedItemId = R.id.recent_menu_button
+        binding.bottomNavigationView.setOnItemSelectedListener {
+
+            when(it.itemId){
+
+                R.id.add_menu_button -> goToAddTransactionActivity()
+                R.id.overview_menu_button -> goToOverViewActivity()
+                else ->{
+
+                }
+            }
+            true
+        }
+
 
         //Setting up recyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
@@ -116,6 +138,17 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner2.adapter = adapter
         }
+
+
+    }
+
+    private fun goToAddTransactionActivity () {
+        val intent = Intent(this, AddTransactionActivity::class.java)
+        startActivity(intent)
+    }
+    private fun goToOverViewActivity () {
+        val intent = Intent(this, OverView::class.java)
+        startActivity(intent)
     }
 
     //Sorts the transaction list by year -> month -> day
