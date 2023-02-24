@@ -47,9 +47,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
             //Order and format list by days
-            //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            //val newTransactionList = sortTransactionList(filteredTransactionList)
             val daysTransactionList = formatListForDays(filteredTransactionList.asReversed())
             for (i in daysTransactionList.indices){
                 values.add(daysTransactionList[i].amount.toFloat())
@@ -62,9 +60,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
             //Order and format list by months
-            //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            //val newTransactionList = sortTransactionList(filteredTransactionList)
             val monthsTransactionList = formatListForMonths(filteredTransactionList.asReversed())
             //Convert to separate lists
             for (i in monthsTransactionList.indices){
@@ -79,10 +75,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             currentCat = parent.getItemAtPosition(pos).toString()
             //Run the same code as in the "days" if-statement.. this could probably be broken out
             //Order and format list by days
-            //val filteredTransactionList =
-            //    sortListOnCategory(transactionList.toMutableList(), currentCat)
             val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            //val newTransactionList = sortTransactionList(filteredTransactionList)
             val daysTransactionList = formatListForDays(filteredTransactionList.asReversed())
             //Convert to separate lists
             for (i in daysTransactionList.indices) {
@@ -96,9 +89,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //Same but for month, this can also probably be broken out to another function
             currentCat = parent.getItemAtPosition(pos).toString()
             //Order and format list by months
-            //val filteredTransactionList = sortListOnCategory(transactionList.toMutableList(), currentCat)
             val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            //val newTransactionList = sortTransactionList(filteredTransactionList)
             val monthsTransactionList = formatListForMonths(filteredTransactionList.asReversed())
             //Convert to separate lists
             for (i in monthsTransactionList.indices){
@@ -349,6 +340,31 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.invalidate()
     }
 
+    fun updateGraphWithSorting(){
+        //Get list filtered on date and category
+        val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
+        //Add the days, or months, together
+        val formattedTransactionList : List<Transaction>
+        if(currentInterval == "Days"){
+            formattedTransactionList = formatListForDays(filteredTransactionList.asReversed())
+        } else{
+            formattedTransactionList = formatListForMonths(filteredTransactionList.asReversed())
+        }
+        //Convert to separate lists
+        val values : MutableList<Float> = ArrayList()
+        val labels : MutableList<String> = ArrayList()
+        for (i in formattedTransactionList.indices){
+            values.add(formattedTransactionList[i].amount.toFloat())
+            labels.add(formattedTransactionList[i].month)
+        }
+        //Set the bar graph
+        if(currentInterval == "Days"){
+            setBarGraph(values, labels, R.color.cornflower)
+        } else{
+            setBarGraph(values,labels, R.color.yellow_orange)
+        }
+    }
+    
     //Returns an empty transaction list (used to handle cases with no data)
     //NO LONGER USED! If the sortTransactionList and sortListOnCategory are removed, this can be too
     fun noDataList() : MutableList<Transaction>{
