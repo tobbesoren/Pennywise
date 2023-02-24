@@ -19,6 +19,7 @@ import java.util.*
 
 class AddTransactionActivity : AppCompatActivity() {
 
+    private lateinit var amountTextLayout: TextInputLayout
     private lateinit var amountEditText: EditText
     private lateinit var radioGroup: RadioGroup
     private lateinit var noteTextInput: TextInputLayout
@@ -41,7 +42,8 @@ class AddTransactionActivity : AppCompatActivity() {
 
 
         radioGroup = findViewById(R.id.radio_group)
-        amountEditText = findViewById(R.id.amountEditText)
+        amountTextLayout = findViewById(R.id.amountTextLayout)
+        amountEditText = findViewById((R.id.amountEditText))
         noteTextInput = findViewById(R.id.noteTextInput)
 
         val builder : MaterialDatePicker.Builder<*> = MaterialDatePicker.Builder.datePicker()

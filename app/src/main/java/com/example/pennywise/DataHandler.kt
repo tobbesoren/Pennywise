@@ -76,7 +76,7 @@ object DataHandler {
     : MutableList<Transaction> {
         val filteredList = mutableListOf<Transaction>()
         for(transaction in allTransactions){
-            if(transaction.timeStamp.slice(0..10) in startDate..endDate
+            if(transaction.timeStamp.slice(0..9) in startDate..endDate
                 && (transaction.category == category || category == "All")) {
                 filteredList.add(transaction)
             }

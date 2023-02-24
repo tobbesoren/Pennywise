@@ -12,38 +12,37 @@
         android:id="@+id/radio_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/returnIB">
+        app:layout_constraintStart_toStartOf="@+id/noteTextInput"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RadioButton
             android:id="@+id/radio_Amusement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/old_burgundy"
-            android:text="@string/amusement" />
+            android:text="@string/amusement"
+            android:textColor="@color/old_burgundy" />
 
         <RadioButton
             android:id="@+id/radio_Household"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/old_burgundy"
-            android:text="@string/household" />
+            android:text="@string/household"
+            android:textColor="@color/old_burgundy" />
 
         <RadioButton
             android:id="@+id/radio_Transportation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/old_burgundy"
-            android:text="@string/transportation" />
+            android:text="@string/transportation"
+            android:textColor="@color/old_burgundy" />
 
         <RadioButton
             android:id="@+id/radio_Dining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/old_burgundy"
-            android:text="@string/dining" />
+            android:text="@string/dining"
+            android:textColor="@color/old_burgundy" />
 
         <RadioButton
             android:id="@+id/radio_Hc_WellN"
@@ -56,8 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:textColor="@color/old_burgundy"
-            android:text="@string/groceries" />
+            android:text="@string/groceries"
+            android:textColor="@color/old_burgundy" />
 
         <RadioButton
             android:id="@+id/radio_Other"
@@ -75,22 +74,36 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/alabaster"
+        android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
 
-    <EditText
-        android:id="@+id/amountEditText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/amountTextLayout"
+        style="@style/Widget.Pennywise.TextInputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:ems="10"
         android:hint="@string/amount"
-        android:inputType="numberDecimal"
+        android:maxEms="10"
+        android:minEms="10"
+        app:counterEnabled="true"
+        app:counterMaxLength="20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteTextInput" />
+        app:layout_constraintTop_toBottomOf="@+id/noteTextInput">
+
+        <EditText
+            android:id="@+id/amountEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:maxLength="20"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/saveFAB"
@@ -103,7 +116,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountEditText"
+        app:layout_constraintTop_toBottomOf="@+id/amountTextLayout"
         app:srcCompat="@drawable/baseline_save_24" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -111,22 +124,23 @@
         style="@style/Widget.Pennywise.TextInputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:hint="@string/note"
         android:maxEms="10"
         android:minEms="10"
         app:counterEnabled="true"
         app:counterMaxLength="20"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radio_group"
+        app:layout_constraintTop_toBottomOf="@+id/dateOfTransactionTV"
         app:startIconDrawable="@drawable/baseline_edit_note_24">
 
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLength="30"
+            android:maxLength="20"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,9 +148,10 @@
         android:id="@+id/dateOfTransactionTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/noteTextInput"
-        app:layout_constraintStart_toEndOf="@+id/radio_group" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
