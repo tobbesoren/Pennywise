@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.TextView
 import com.example.pennywise.databinding.ActivityOverViewBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
@@ -38,11 +39,27 @@ class OverView : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         categorySelected = getString(R.string.all)
 
         super.onCreate(savedInstanceState)
         binding = ActivityOverViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.bottomNavigationView.selectedItemId = R.id.overview_menu_button
+        binding.bottomNavigationView.setOnItemSelectedListener {
+
+            when(it.itemId){
+
+                R.id.add_menu_button -> goToAddTransactionActivity()
+                R.id.recent_menu_button -> goToRecentTransactionActivity()
+                else ->{
+
+                }
+            }
+            true
+        }
 
         expensePresentView = findViewById(R.id.expenseTextView)
         expenseTextView = findViewById(R.id.expense2TextView)
@@ -67,24 +84,25 @@ class OverView : AppCompatActivity() {
             val intent = Intent(this, CameraScanner::class.java)
             startActivity(intent)
         }
-
-        // addExpenseFAB
-        val  addExpenseFAB = findViewById<FloatingActionButton>(R.id.addExpenseFAB)
-        addExpenseFAB.setOnClickListener {
-            val intent = Intent(this, AddTransactionActivity::class.java)
-            startActivity(intent)
-        }
-
-        // chartFAB
-        val chartFAB = findViewById<FloatingActionButton>(R.id.chartFAB)
-        chartFAB.setOnClickListener {
-            val intent = Intent(this, RecentTransactions::class.java)
-            startActivity(intent)
-        }
     }
+
+    private fun goToAddTransactionActivity () {
+        val intent = Intent(this, AddTransactionActivity::class.java)
+        startActivity(intent)
+    }
+    private fun goToOverViewActivity () {
+        val intent = Intent(this, OverView::class.java)
+        startActivity(intent)
+    }
+    private fun goToRecentTransactionActivity () {
+        val intent = Intent(this, RecentTransactions::class.java)
+        startActivity(intent)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_pennywise, menu)
+//        menuInflater.inflate(R.menu.bottom_nav, menu2)
         return true
     }
     // functionality for expenseTextView

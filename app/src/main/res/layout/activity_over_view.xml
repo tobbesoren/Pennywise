@@ -54,21 +54,6 @@
         app:layout_constraintStart_toStartOf="@+id/fromTW"
         app:layout_constraintTop_toBottomOf="@+id/hintTW" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addExpenseFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:layout_marginEnd="84dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="@color/cornflower"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scanExpenseFAB"
-        app:srcCompat="@drawable/baseline_library_add_24" />
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -81,33 +66,6 @@
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/scanExpenseFAB"
         app:layout_constraintStart_toEndOf="@+id/scanExpenseFAB" />
-
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="409dp"
-        android:layout_height="450dp"
-        android:layout_marginTop="340dp"
-        android:elevation="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </FrameLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/chartFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="108dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="@color/cornflower"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scanExpenseFAB"
-        app:srcCompat="@drawable/baseline_insert_chart_24" />
 
     <TextView
         android:id="@+id/fromTW"
@@ -141,5 +99,18 @@
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/hintTW"
         app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/yellow_orange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:itemTextColor="@drawable/selector"
+        app:itemIconTint="@drawable/selector"
+        app:menu="@menu/bottom_nav"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

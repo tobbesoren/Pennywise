@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/add_menu_button"
+        android:icon="@drawable/ic_add"
+        android:iconTint="@color/old_burgundy"
+        android:title="Add"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/overview_menu_button"
+        android:icon="@drawable/ic_home"
+        android:iconTint="@color/old_burgundy"
+        android:title="Overview"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/recent_menu_button"
+        android:icon="@drawable/baseline_insert_chart_24"
+        android:title="Recent"
+        android:visible="true" />
+</menu>
