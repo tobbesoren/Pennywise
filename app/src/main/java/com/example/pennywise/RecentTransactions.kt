@@ -35,74 +35,23 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
 
     //For spinners, gets called when option is selected by user.
-    // I believe this can be broken down into smaller functions
     override fun onItemSelected(parent: AdapterView<*>, View: View?, pos: Int, id: Long){
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
 
-        val values : MutableList<Float> = ArrayList()
-        val labels : MutableList<String> = ArrayList()
-        //CASE: "Days" selected, current category can be retrieved from currentCat
-        if(parent.getItemAtPosition(pos).equals("Days")){
+        if(parent.getItemAtPosition(pos) == "Days" || parent.getItemAtPosition(pos) == "Months"){
             //Set currentInterval to chosen spinner option
             currentInterval = parent.getItemAtPosition(pos).toString()
-            //Order and format list by days
-            val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            val daysTransactionList = formatListForDays(filteredTransactionList.asReversed())
-            for (i in daysTransactionList.indices){
-                values.add(daysTransactionList[i].amount.toFloat())
-                labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
-            }
-            //Set the graph
-            setBarGraph(values, labels, R.color.cornflower)
-        //CASE: "Months" selected, current category can be retrieved from currentCat
-        } else if(parent.getItemAtPosition(pos).equals("Months")){ //If "Months"
-            //Set currentInterval to chosen spinner option
-            currentInterval = parent.getItemAtPosition(pos).toString()
-            //Order and format list by months
-            val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            val monthsTransactionList = formatListForMonths(filteredTransactionList.asReversed())
-            //Convert to separate lists
-            for (i in monthsTransactionList.indices){
-                values.add(monthsTransactionList[i].amount.toFloat())
-                labels.add(monthsTransactionList[i].month)
-            }
-            //Set the bar graph
-            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
-        //CASE: A category has been selected, and "Days" has previously been selected
-        } else if(currentInterval == "Days") {
-            //Set currentCat to whichever category is chosen
-            currentCat = parent.getItemAtPosition(pos).toString()
-            //Run the same code as in the "days" if-statement.. this could probably be broken out
-            //Order and format list by days
-            val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            val daysTransactionList = formatListForDays(filteredTransactionList.asReversed())
-            //Convert to separate lists
-            for (i in daysTransactionList.indices) {
-                values.add(daysTransactionList[i].amount.toFloat())
-                labels.add(daysTransactionList[i].day + "/" + daysTransactionList[i].month)
-            }
-            //Set the graph
-            setBarGraph(values, labels, R.color.cornflower)
-        //CASE: A category has been selected, and "Months" has previously been selected
+            updateGraphWithSorting()
         } else{
-            //Same but for month, this can also probably be broken out to another function
+            //Set the current category to chosen spinner option
             currentCat = parent.getItemAtPosition(pos).toString()
-            //Order and format list by months
-            val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
-            val monthsTransactionList = formatListForMonths(filteredTransactionList.asReversed())
-            //Convert to separate lists
-            for (i in monthsTransactionList.indices){
-                values.add(monthsTransactionList[i].amount.toFloat())
-                labels.add(monthsTransactionList[i].month)
-            }
-            //Set the bar graph
-            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
+            updateGraphWithSorting()
         }
 
     }
     override fun onNothingSelected(parent:AdapterView<*>){
-        //Another interface callback
+        //Not used in this activity, but needs to be overridden
     }
 
 
@@ -193,6 +142,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
+                // It basically replaces the last transaction in the list with a new one with the amounts added together
 
             //If the date differs from the previous one added, add as new entry
             } else{
@@ -215,6 +165,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
                 && formattedList.last().year.equals(transactions[i].year)){
                 formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
+                // It basically replaces the last transaction in the list with a new one with the amounts added together
 
             //If the month+year differs from the previous one added, add as new entry
             } else{
@@ -256,6 +207,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
             startDate = convertLongToDate(datePicked.first)
             endDate = convertLongToDate(datePicked.second)
+            updateGraphWithSorting()
 
         }
     }
@@ -340,6 +292,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.invalidate()
     }
 
+    //Sorts everything in accordance to the spinners, and then runs setBarGraph
     fun updateGraphWithSorting(){
         //Get list filtered on date and category
         val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
@@ -357,14 +310,19 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             values.add(formattedTransactionList[i].amount.toFloat())
             labels.add(formattedTransactionList[i].month)
         }
+        //To fix no-data bug, add a zero amount transaction in case there's no data
+        if(values.isEmpty()){
+            values.add(0f)
+            labels.add("")
+        }
         //Set the bar graph
         if(currentInterval == "Days"){
-            setBarGraph(values, labels, R.color.cornflower)
+            setBarGraph(values, labels, ContextCompat.getColor(this, R.color.cornflower))
         } else{
-            setBarGraph(values,labels, R.color.yellow_orange)
+            setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
         }
     }
-    
+
     //Returns an empty transaction list (used to handle cases with no data)
     //NO LONGER USED! If the sortTransactionList and sortListOnCategory are removed, this can be too
     fun noDataList() : MutableList<Transaction>{
