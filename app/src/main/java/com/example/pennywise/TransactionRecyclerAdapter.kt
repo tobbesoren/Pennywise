@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TransactionRecyclerAdapter (context: Context, private val transactions: List<Transaction>)
+class TransactionRecyclerAdapter (context: Context, private var transactions: List<Transaction>)
     : RecyclerView.Adapter<TransactionRecyclerAdapter.ViewHolder>() {
 
     val context = context
@@ -41,6 +41,11 @@ class TransactionRecyclerAdapter (context: Context, private val transactions: Li
         val timestampTextView = itemView.findViewById<TextView>(R.id.timestampTextView)
         val categoryTextView = itemView.findViewById<TextView>(R.id.categoryTextView)
         val noteTextView = itemView.findViewById<TextView>(R.id.noteTextView)
+    }
+
+    fun setNewData(filteredTransactions: MutableList<Transaction>) {
+        transactions = filteredTransactions
+        notifyDataSetChanged()
     }
 
 }
