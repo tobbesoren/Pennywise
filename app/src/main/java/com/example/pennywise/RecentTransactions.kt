@@ -28,6 +28,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     //Main data
     var transactionList : List<Transaction> = DataHandler.allTransactions
+    lateinit var adapter: TransactionRecyclerAdapter
     //What is the category spinner currently set to?
     var currentCat : String = "All"
     //What is the days/months spinner currently set to?
@@ -63,6 +64,9 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recent_transactions)
 
+        //Init adapter
+        adapter = TransactionRecyclerAdapter(this, DataHandler.allTransactions)
+
         binding = ActivityRecentTransactionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -85,7 +89,6 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = TransactionRecyclerAdapter(this, DataHandler.allTransactions)
         recyclerView.adapter = adapter
 
 
@@ -354,6 +357,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         } else{
             setBarGraph(values,labels, ContextCompat.getColor(this, R.color.yellow_orange))
         }
+        //Reset adapter data
+        adapter.setNewData(filteredTransactionList)
     }
 
     //Returns an empty transaction list (used to handle cases with no data)
