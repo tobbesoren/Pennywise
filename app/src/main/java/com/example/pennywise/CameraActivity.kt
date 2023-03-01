@@ -1,6 +1,8 @@
 package com.example.pennywise
 
 import android.Manifest
+import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -22,14 +24,23 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizer
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import android.app.ProgressDialog
+import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.android.synthetic.main.activity_camera_scanner.*
 
 
 class CameraActivity : AppCompatActivity() {
 
+    private lateinit var textRecognizer: TextRecognizer
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var progressDialog: ProgressDialog
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +53,7 @@ class CameraActivity : AppCompatActivity() {
         outputDirectory = getOutputDirectory()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+        textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     }
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
@@ -73,6 +85,43 @@ class CameraActivity : AppCompatActivity() {
                     val msg = "Photo capture succeeded: $savedUri"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
+                    progressDialog.setMessage("Preparing Image...")
+                    progressDialog.show()
+
+                    try {
+                        // prepare InputImage from image uri
+                        val inputImage = InputImage.fromFilePath(this@CameraActivity, savedUri!!)
+                        //image prepared starting the recognizing process
+                        progressDialog.setMessage("Working on it...")
+
+                        val textTaskResult = textRecognizer.process(inputImage)
+                            .addOnSuccessListener { text ->
+
+                                progressDialog.dismiss()
+                                // get the recognized text
+                                val inputT = text.text
+                                // sets the recognized text to edit text
+                                val intent = Intent(this@CameraActivity,AddTransactionActivity::class.java)
+                                intent.putExtra("Amount", inputT)
+                                finish()
+                                startActivity(intent)
+
+
+                            }
+                            .addOnFailureListener { e->
+                                // failed recognizing show reason in toast
+                                progressDialog.dismiss()
+                                showToast("Failed due to ${e.message}")
+
+                            }
+
+                    }
+                    catch (e: Exception){
+
+                        progressDialog.dismiss()
+                        // Exception while preparing InputImage show reason in toast
+                        showToast("Failed to prepare image due to ${e.message}")
+                    }
                 }
             })
     }
@@ -124,7 +173,7 @@ class CameraActivity : AppCompatActivity() {
             mediaDir else filesDir
     }
 
-    override fun onDestroy() {
+    override fun onDestroy(){
         super.onDestroy()
         cameraExecutor.shutdown()
     }
@@ -154,6 +203,8 @@ class CameraActivity : AppCompatActivity() {
 
     }
 
+
+
     private fun onPermissionGranted( requestCode: Int, perms: MutableList<String>) {
         startCamera()
     }
@@ -175,6 +226,7 @@ class CameraActivity : AppCompatActivity() {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 
-
-
+    private fun showToast(message: String){
+        Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
+    }
 }
