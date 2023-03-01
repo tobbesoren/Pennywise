@@ -1,6 +1,7 @@
 package com.example.pennywise
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,12 @@ class TransactionRecyclerAdapter (context: Context, private var transactions: Li
         holder.timestampTextView.text = transaction.timeStamp
         holder.categoryTextView.text = transaction.category
         holder.noteTextView.text = transaction.note
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, AddTransactionActivity::class.java)
+            intent.putExtra("transaction", transaction)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

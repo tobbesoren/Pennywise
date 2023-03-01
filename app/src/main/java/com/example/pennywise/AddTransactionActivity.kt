@@ -1,19 +1,23 @@
 package com.example.pennywise
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View.INVISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pennywise.databinding.ActivityAddTransactionBinding
-import com.example.pennywise.databinding.ActivityOverViewBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneOffset
@@ -26,6 +30,8 @@ class AddTransactionActivity : AppCompatActivity() {
     private lateinit var amountEditText: EditText
     private lateinit var radioGroup: RadioGroup
     private lateinit var noteTextInput: TextInputLayout
+    private lateinit var noteEditText: EditText
+    private lateinit var deleteImageButton: ImageButton
 
     private lateinit var binding: ActivityAddTransactionBinding
     private val uid = Firebase.auth.uid.toString()
@@ -34,6 +40,9 @@ class AddTransactionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_transaction)
+
+        val savedTransaction: Transaction? = getSerializable(this,
+            "transaction", Transaction::class.java)
 
         binding = ActivityAddTransactionBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -59,13 +68,15 @@ class AddTransactionActivity : AppCompatActivity() {
 
         var dateOfTransactionSliced = timeStamp.slice(0..9)
         var dateOfTransactionText = findViewById<TextView>(R.id.dateOfTransactionTV)
-        dateOfTransactionText.setText(dateOfTransactionSliced)
+        dateOfTransactionText.text = dateOfTransactionSliced
 
 
         radioGroup = findViewById(R.id.radio_group)
         amountTextLayout = findViewById(R.id.amountTextLayout)
         amountEditText = findViewById((R.id.amountEditText))
         noteTextInput = findViewById(R.id.noteTextInput)
+        noteEditText = findViewById((R.id.noteEditText))
+        deleteImageButton = findViewById(R.id.deleteImageButton)
 
         val builder : MaterialDatePicker.Builder<*> = MaterialDatePicker.Builder.datePicker()
         builder.setTitleText("Select date of transaction")
@@ -84,11 +95,39 @@ class AddTransactionActivity : AppCompatActivity() {
         }
 
 
+
         // The amount transferred from CameraScannerActivity
         val scannedAmount = intent.getStringExtra("Amount")
         if (scannedAmount != null) {
             amountEditText.setText(scannedAmount)
         }
+
+        //Data transferred from Recent Transactions
+        if(savedTransaction != null) {
+            deleteImageButton.setOnClickListener {
+                Log.d("!!!", savedTransaction.toString())
+                deleteTransactionReloadAndReturn(savedTransaction)
+            }
+            val balance = Balance()
+            timeStamp = savedTransaction.timeStamp
+            balance.setAmount(savedTransaction.amount)
+            amountEditText.setText(balance.balanceString(this).dropLast(2))
+            noteEditText.setText(savedTransaction.note)
+            dateOfTransactionText.text = timeStamp.slice(0..9)
+            when(savedTransaction.category) {
+                getString(R.string.amusement) -> radioGroup.check(R.id.radio_Amusement)
+                getString(R.string.household) -> radioGroup.check(R.id.radio_Household)
+                getString(R.string.transportation) -> radioGroup.check(R.id.radio_Transportation)
+                getString(R.string.dining) -> radioGroup.check(R.id.radio_Dining)
+                getString(R.string.healthcare_wellness) -> radioGroup.check(R.id.radio_Hc_WellN)
+                getString(R.string.groceries) -> radioGroup.check(R.id.radio_Groceries)
+                getString(R.string.other) -> radioGroup.check(R.id.radio_Other)
+            }
+
+        } else {
+            deleteImageButton.visibility = INVISIBLE
+        }
+
 
         //This limits the input to two decimal places
         amountEditText.addDecimalLimiter()
@@ -111,7 +150,6 @@ class AddTransactionActivity : AppCompatActivity() {
             } else {
                 //Here we create a Transaction based on the user input and save to Firestore.
                 val category = rButtonChecked()
-
                 val year: String = timeStamp.slice(0..3)
                 val month: String = timeStamp.slice(5..6)
                 val day: String = timeStamp.slice(8..9)
@@ -119,6 +157,7 @@ class AddTransactionActivity : AppCompatActivity() {
                 val note = noteTextInput.editText?.text.toString()
 
                 val transaction = Transaction(
+                    null,
                     amount,
                     category,
                     timeStamp,
@@ -127,14 +166,41 @@ class AddTransactionActivity : AppCompatActivity() {
                     day,
                     time,
                     note)
-                //The addTransaction function in DataHandler is called.
-                DataHandler.addTransaction(uid, transaction)
-                Log.d("!!!", " transaction contains 1.Amount: ${transaction.amount}. " +
-                        "2. Category: ${transaction.category}. " +
-                        "2. Date: ${transaction.timeStamp}")
+
+                if(savedTransaction != null) {
+                    DataHandler.updateTransaction(uid,transaction, savedTransaction.id)
+                } else {
+                    DataHandler.addTransaction(uid, transaction)
+                }
                 finish()
             }
         }
+    }
+
+
+    private fun deleteTransactionReloadAndReturn(transaction: Transaction) {
+        if(Firebase.auth.uid != null) {
+            val docRef = Firebase.firestore.collection("users/${uid}/transactions/")
+            docRef.document("${transaction.id}").delete()
+                .addOnSuccessListener {
+                    Log.d("!!!!", "Transaction deleted")
+                    finish()
+                }
+        } else {
+            Log.d("!!!!", "Could not delete transaction - User not logged in")
+        }
+    }
+
+    /**
+     * Handles the getSerializableExtra for different versions.
+     */
+    @Suppress("DEPRECATION")
+    private fun <T : Serializable?> getSerializable(activity: Activity, name: String, clazz: Class<T>): T?
+    {
+        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            activity.intent.getSerializableExtra(name, clazz)
+        else
+            activity.intent.getSerializableExtra(name) as T
     }
 
     private fun goToOverViewActivity () {
