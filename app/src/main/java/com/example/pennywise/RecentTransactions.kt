@@ -110,7 +110,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
 
-        //Giving the graph some initial values, this will be "overridden" once the spinners load
+        //Giving the graph some initial values, this will be "overridden" once the spinners load 
         val values : MutableList<Float> = ArrayList()
         val labels : MutableList<String> = ArrayList()
 
@@ -177,17 +177,6 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         startActivity(intent)
     }
 
-    //Sorts the transaction list by year -> month -> day
-    //NO LONGER USED! As DataHandler sorts it. Can probably be removed
-    fun sortTransactionList(transactions : List<Transaction>) : MutableList<Transaction> {
-        val newTransactionList = transactions.sortedWith(compareBy<Transaction> {it.year}.thenBy {it.month}
-            .thenBy {it.day})
-        if(newTransactionList.isEmpty()){
-            return noDataList() //If empty return this list instead (prevents crash)
-        }
-        return newTransactionList as MutableList<Transaction>
-    }
-
     //Adds all values for days together
     fun formatListForDays(transactions : List<Transaction>) : MutableList<Transaction>{
         val formattedList : MutableList<Transaction> = ArrayList()
@@ -233,20 +222,6 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
         //Return the new list
         return formattedList
-    }
-
-    //Filter the list based on category,
-    //NO LONGER USED! Can probably be removed
-    fun sortListOnCategory(transactions : MutableList<Transaction>, cat : String) : MutableList<Transaction>{
-        if(cat.equals("All")){
-            return transactions
-        }else{
-            val sortedList = transactions.filter { it.category == cat }
-            if(sortedList.isEmpty()){
-                return noDataList() //If empty return this list instead (prevents crash)
-            }
-            return sortedList.toMutableList()
-        }
     }
 
     //Show the date picker (mostly same as in overview)
@@ -309,9 +284,6 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             dataSet.setColor(chartColor)
         }
 
-        //Draws a 1-pixel-wide borderline around the bars, not sure if we want this
-        //dataSet.barBorderWidth = 1f
-
         val barData = BarData(dataSet)
 
         barData.setBarWidth(0.6f)
@@ -337,6 +309,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.setAutoScaleMinMaxEnabled(false) //Disable that the chart "jumps" as you scroll
         chart.moveViewToX(entries.size.toFloat()) //Center the view towards the right
         chart.zoomOut() //Zoom out in case the graph was previously zoomed in
+        chart.zoomOut() //Call twice as a single zoom-out isn't always enough
 
 
         //Remove small description in the corner
@@ -367,7 +340,11 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val labels : MutableList<String> = ArrayList()
         for (i in formattedTransactionList.indices){
             values.add(formattedTransactionList[i].amount.toFloat())
-            labels.add(formattedTransactionList[i].month)
+            if(currentInterval == "Months") {
+                labels.add(formattedTransactionList[i].month)
+            } else{
+                labels.add(formattedTransactionList[i].day + "/" + formattedTransactionList[i].month)
+            }
         }
         //To fix no-data bug, add a zero amount transaction in case there's no data
         if(values.isEmpty()){
@@ -384,12 +361,5 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         adapter.setNewData(filteredTransactionList)
     }
 
-    //Returns an empty transaction list (used to handle cases with no data)
-    //NO LONGER USED! If the sortTransactionList and sortListOnCategory are removed, this can be too
-    fun noDataList() : MutableList<Transaction>{
-        val noDataTransactionList : MutableList<Transaction> =
-            ArrayList()
-        noDataTransactionList.add(Transaction(amount = 0))
-        return noDataTransactionList
-    }
+
 }

@@ -8,7 +8,7 @@
     <!--***********************************************************************-->
 
     <!--AddTransactionActivity.kt-->
-    <string name="decimal_delimiter">.</string>
+    <string name="decimal_delimiter" translatable="false">.</string>
     <string name="fill_in_an_amount_to_save_transaction">Fill in an amount to save transaction</string>
 
     <!--Balance-->
