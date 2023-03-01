@@ -39,8 +39,8 @@ class CameraActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var progressDialog: ProgressDialog
-    private var imageUri: Uri? = null
+
+    private var savedUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,19 +85,16 @@ class CameraActivity : AppCompatActivity() {
                     val msg = "Photo capture succeeded: $savedUri"
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
-                    progressDialog.setMessage("Preparing Image...")
-                    progressDialog.show()
 
                     try {
                         // prepare InputImage from image uri
                         val inputImage = InputImage.fromFilePath(this@CameraActivity, savedUri!!)
                         //image prepared starting the recognizing process
-                        progressDialog.setMessage("Working on it...")
 
                         val textTaskResult = textRecognizer.process(inputImage)
                             .addOnSuccessListener { text ->
 
-                                progressDialog.dismiss()
+
                                 // get the recognized text
                                 val inputT = text.text
                                 // sets the recognized text to edit text
@@ -105,12 +102,12 @@ class CameraActivity : AppCompatActivity() {
                                 intent.putExtra("Amount", inputT)
                                 finish()
                                 startActivity(intent)
+                                cameraExecutor.shutdown()
 
 
                             }
                             .addOnFailureListener { e->
                                 // failed recognizing show reason in toast
-                                progressDialog.dismiss()
                                 showToast("Failed due to ${e.message}")
 
                             }
@@ -118,7 +115,6 @@ class CameraActivity : AppCompatActivity() {
                     }
                     catch (e: Exception){
 
-                        progressDialog.dismiss()
                         // Exception while preparing InputImage show reason in toast
                         showToast("Failed to prepare image due to ${e.message}")
                     }
