@@ -261,9 +261,6 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             dataSet.setColor(chartColor)
         }
 
-        //Draws a 1-pixel-wide borderline around the bars, not sure if we want this
-        //dataSet.barBorderWidth = 1f
-
         val barData = BarData(dataSet)
 
         barData.setBarWidth(0.6f)
@@ -289,6 +286,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.setAutoScaleMinMaxEnabled(false) //Disable that the chart "jumps" as you scroll
         chart.moveViewToX(entries.size.toFloat()) //Center the view towards the right
         chart.zoomOut() //Zoom out in case the graph was previously zoomed in
+        chart.zoomOut() //Call twice as a single zoom-out isn't always enough
 
 
         //Remove small description in the corner
@@ -319,7 +317,11 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val labels : MutableList<String> = ArrayList()
         for (i in formattedTransactionList.indices){
             values.add(formattedTransactionList[i].amount.toFloat())
-            labels.add(formattedTransactionList[i].month)
+            if(currentInterval == "Months") {
+                labels.add(formattedTransactionList[i].month)
+            } else{
+                labels.add(formattedTransactionList[i].day + "/" + formattedTransactionList[i].month)
+            }
         }
         //To fix no-data bug, add a zero amount transaction in case there's no data
         if(values.isEmpty()){
