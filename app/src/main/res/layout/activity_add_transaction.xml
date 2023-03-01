@@ -13,50 +13,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@+id/noteTextInput"
+        android:layout_marginBottom="35dp"
+        app:layout_constraintBottom_toTopOf="@+id/noteTextInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RadioButton
-            android:id="@+id/radio_Amusement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/amusement"
-            android:textColor="@color/old_burgundy" />
-
-        <RadioButton
-            android:id="@+id/radio_Household"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/household"
-            android:textColor="@color/old_burgundy" />
-
-        <RadioButton
-            android:id="@+id/radio_Transportation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/transportation"
-            android:textColor="@color/old_burgundy" />
-
-        <RadioButton
-            android:id="@+id/radio_Dining"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dining"
-            android:textColor="@color/old_burgundy" />
-
-        <RadioButton
-            android:id="@+id/radio_Hc_WellN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/healthcare_wellness" />
-
-        <RadioButton
-            android:id="@+id/radio_Groceries"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="@string/groceries"
-            android:textColor="@color/old_burgundy" />
 
         <RadioButton
             android:id="@+id/radio_Other"
@@ -64,7 +26,65 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="@string/other"
-            android:textColor="@color/yellow_orange" />
+            android:textColor="@color/yellow_orange"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/radio_Dining" />
+
+        <RadioButton
+            android:id="@+id/radio_Transportation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/transportation"
+            android:textColor="@color/old_burgundy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radio_Household" />
+
+        <RadioButton
+            android:id="@+id/radio_Groceries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/groceries"
+            android:textColor="@color/old_burgundy"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/radio_Hc_WellN" />
+
+        <RadioButton
+            android:id="@+id/radio_Dining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dining"
+            android:textColor="@color/old_burgundy"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/radio_Groceries" />
+
+        <RadioButton
+            android:id="@+id/radio_Hc_WellN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/healthcare_wellness"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioButton
+            android:id="@+id/radio_Household"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/household"
+            android:textColor="@color/old_burgundy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radio_Amusement" />
+
+        <RadioButton
+            android:id="@+id/radio_Amusement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amusement"
+            android:textColor="@color/old_burgundy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
     </RadioGroup>
 
     <ImageButton
@@ -109,9 +129,9 @@
         android:id="@+id/saveFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:clickable="true"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/cornflower"
+        android:clickable="true"
         android:foregroundTint="@color/old_burgundy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -138,6 +158,7 @@
 
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/noteEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLength="20"
@@ -166,5 +187,15 @@
         app:itemTextColor="@drawable/selector"
         app:itemIconTint="@drawable/selector"
         app:menu="@menu/bottom_nav"/>
+
+    <ImageButton
+        android:id="@+id/deleteImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_delete_forever_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

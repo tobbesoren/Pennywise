@@ -3,6 +3,7 @@ package com.example.pennywise
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -16,6 +17,10 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
@@ -25,6 +30,7 @@ import kotlin.collections.ArrayList
 class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var binding : ActivityRecentTransactionsBinding
+    private val uid = Firebase.auth.uid.toString()
 
     //Main data
     var transactionList : List<Transaction> = DataHandler.allTransactions
@@ -145,6 +151,23 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        loadData(uid)
+    }
+
+    private fun loadData(uid: String) {
+        Firebase.firestore.collection("users/${uid}/transactions")
+            .get()
+            .addOnSuccessListener { documentSnapShot ->
+                DataHandler.updateList(documentSnapShot)
+                updateGraphWithSorting()
+            }.addOnFailureListener { exception ->
+                Log.d("!!!!", exception.toString())
+            }
+    }
+
     private fun goToAddTransactionActivity () {
         val intent = Intent(this, AddTransactionActivity::class.java)
         startActivity(intent)
@@ -165,7 +188,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             } else if(formattedList.last().day.equals(transactions[i].day)
                 && formattedList.last().month.equals(transactions[i].month)
                 && formattedList.last().year.equals(transactions[i].year)){
-                formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
+                formattedList[formattedList.size - 1] = Transaction(null,formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
                 // It basically replaces the last transaction in the list with a new one with the amounts added together
 
@@ -188,7 +211,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             //If the month+year of this transaction is the same as the previous one added, "merge" them
             } else if(formattedList.last().month.equals(transactions[i].month)
                 && formattedList.last().year.equals(transactions[i].year)){
-                formattedList[formattedList.size - 1] = Transaction(formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
+                formattedList[formattedList.size - 1] = Transaction(null,formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
                 // ^Temporary horrible code line as I couldn't update just the amount
                 // It basically replaces the last transaction in the list with a new one with the amounts added together
 
@@ -337,5 +360,6 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         //Reset adapter data
         adapter.setNewData(filteredTransactionList)
     }
+
 
 }

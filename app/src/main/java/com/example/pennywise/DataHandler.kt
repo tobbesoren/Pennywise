@@ -16,13 +16,28 @@ object DataHandler {
      * Used to ad a transaction to Firestore. Takes current user ID and a Transaction as argument.
      */
     //Should make Toast instead of Log.
-    fun addTransaction(userID: String,transaction: Transaction) {
+    fun addTransaction(userID: String, transaction: Transaction) {
         if(Firebase.auth.uid != null) {
             Firebase.firestore.collection(
                 "users/${userID}/transactions").add(transaction)
                 .addOnSuccessListener { documentReference ->
                     Log.d(
                         "!!!!", "DocumentSnapshot added with ID: ${documentReference.id}")
+                }.addOnFailureListener { exception ->
+                    Log.d("!!!!", exception.toString())
+                }
+        } else {
+            Log.d("!!!!", "Could not add transaction - User not logged in")
+        }
+    }
+
+    fun updateTransaction(userID: String, transaction: Transaction, documentID: String?) {
+        if(Firebase.auth.uid != null) {
+            Firebase.firestore.collection(
+                "users/${userID}/transactions").document("$documentID")
+                .set(transaction)
+                .addOnSuccessListener {
+                    Log.d("!!!!", "Transaction updated")
                 }.addOnFailureListener { exception ->
                     Log.d("!!!!", exception.toString())
                 }
