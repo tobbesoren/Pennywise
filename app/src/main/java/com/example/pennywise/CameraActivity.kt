@@ -2,35 +2,34 @@ package com.example.pennywise
 
 import android.Manifest
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
+import androidx.camera.core.AspectRatio.RATIO_16_9
+import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.example.pennywise.CameraConstants.FILENAME_FORMAT
 import com.example.pennywise.CameraConstants.REQUEST_CODE_CAMERA_PERMISSION
 import com.example.pennywise.CameraConstants.TAG
-import kotlinx.android.synthetic.main.activity_camera.*
-import pub.devrel.easypermissions.AppSettingsDialog
-import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
-import java.nio.ByteBuffer
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import android.app.ProgressDialog
-import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.android.synthetic.main.activity_camera.*
 import kotlinx.android.synthetic.main.activity_camera_scanner.*
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
 class CameraActivity : AppCompatActivity() {
@@ -47,6 +46,7 @@ class CameraActivity : AppCompatActivity() {
         setContentView(R.layout.activity_camera)
         requestPermission()
 
+
         // Set up the listener for take photo button
         camera_capture_button.setOnClickListener { takePhoto() }
 
@@ -55,6 +55,7 @@ class CameraActivity : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     }
+
     private fun takePhoto() {
         // Get a stable reference of the modifiable image capture use case
         val imageCapture = imageCapture ?: return
@@ -77,14 +78,11 @@ class CameraActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    val msg = "Photo capture succeeded: $savedUri"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
+
 
                     try {
                         // prepare InputImage from image uri
@@ -122,19 +120,31 @@ class CameraActivity : AppCompatActivity() {
             })
     }
 
+
+
+
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
 
         cameraProviderFuture.addListener({
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
+
+
             // Preview
             val preview = Preview.Builder()
+                .setTargetAspectRatio(RATIO_16_9)
                 .build()
                 .also {
                     it.setSurfaceProvider(viewFinder.surfaceProvider)
+
+
+
+
                 }
+
 
             imageCapture = ImageCapture.Builder()
                 .build()
@@ -201,6 +211,7 @@ class CameraActivity : AppCompatActivity() {
 
 
 
+
     private fun onPermissionGranted( requestCode: Int, perms: MutableList<String>) {
         startCamera()
     }
@@ -225,4 +236,6 @@ class CameraActivity : AppCompatActivity() {
     private fun showToast(message: String){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
     }
+
+
 }

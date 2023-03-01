@@ -85,6 +85,9 @@
     <string name="test_1">Test 1</string>
     <string name="test_2">Test 2</string>
 
+    <!--activity_camera.xml-->
+    <string name="camera_button">Scan text</string>
+
     <!--***********************************************************************-->
 
 
