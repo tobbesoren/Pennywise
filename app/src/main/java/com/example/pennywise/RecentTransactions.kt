@@ -104,7 +104,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         }
 
 
-        //Giving the graph some initial values, this will be "overridden" once the spinners load
+        //Giving the graph some initial values, this will be "overridden" once the spinners load 
         val values : MutableList<Float> = ArrayList()
         val labels : MutableList<String> = ArrayList()
 
