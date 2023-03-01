@@ -261,6 +261,9 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
             dataSet.setColor(chartColor)
         }
 
+        //Draws a 1-pixel-wide borderline around the bars, not sure if we want this
+        //dataSet.barBorderWidth = 1f
+
         val barData = BarData(dataSet)
 
         barData.setBarWidth(0.6f)
@@ -281,10 +284,11 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         chart.getLegend().setEnabled(false) //Hide an unneeded description under the chart
         chart.setDoubleTapToZoomEnabled(false) //Disable zooming into the chart by tapping
         chart.setVisibleXRangeMaximum(6f) //Show no more than 6 bars (this enables scrolling if there are more)
+        //chart.setVisibleXRangeMinimum(6f) //Always show at least room for 6 bars
+        // (makes the bar width static, but centers the bars to the left, which looks odd)
         chart.setAutoScaleMinMaxEnabled(false) //Disable that the chart "jumps" as you scroll
         chart.moveViewToX(entries.size.toFloat()) //Center the view towards the right
         chart.zoomOut() //Zoom out in case the graph was previously zoomed in
-        chart.zoomOut() //Run it twice as once doesn't necessarily show the entire graph
 
 
         //Remove small description in the corner
@@ -315,11 +319,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val labels : MutableList<String> = ArrayList()
         for (i in formattedTransactionList.indices){
             values.add(formattedTransactionList[i].amount.toFloat())
-            //Write the date above the staples if interval set to days, otherwise the month
-            if(currentInterval == "Days"){
-                labels.add(formattedTransactionList[i].day + "/" + formattedTransactionList[i].month)
-            } else{
-            labels.add(formattedTransactionList[i].month)}
+            labels.add(formattedTransactionList[i].month)
         }
         //To fix no-data bug, add a zero amount transaction in case there's no data
         if(values.isEmpty()){
