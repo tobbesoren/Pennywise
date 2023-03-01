@@ -210,10 +210,11 @@ class CameraScanner : AppCompatActivity() {
 
         imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         // intent to launch the camera
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val intent = Intent(this, CameraActivity :: class.java)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-        cameraActivityResultLauncher.launch(intent)
+        startActivity(intent)
     }
+
 
 
     private val cameraActivityResultLauncher =
