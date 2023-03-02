@@ -9,7 +9,6 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pennywise.databinding.ActivityOverViewBinding
 import com.example.pennywise.databinding.ActivityRecentTransactionsBinding
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.BarChart
@@ -17,7 +16,6 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -114,7 +112,7 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val values : MutableList<Float> = ArrayList()
         val labels : MutableList<String> = ArrayList()
 
-        val daysTransactionList = formatListForMonths(transactionList)
+        val daysTransactionList = formatListForDaysOrMonths(transactionList)
 
         for (i in daysTransactionList.indices){
             values.add(daysTransactionList[i].amount.toFloat())
@@ -177,20 +175,19 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         startActivity(intent)
     }
 
-    //Adds all values for days together
-    fun formatListForDays(transactions : List<Transaction>) : MutableList<Transaction>{
-        val formattedList : MutableList<Transaction> = ArrayList()
+    //Adds all values for days, or months, together, so that they can be a single bar in the graph
+    fun formatListForDaysOrMonths(transactions : List<Transaction>) : MutableList<Transaction>{
+        var formattedList : MutableList<Transaction> = ArrayList()
         //For every transaction in the transaction list
         for (i in transactions.indices){
             if (formattedList.isEmpty()){
                 formattedList.add(transactions[i]) //If this is the first call, just add it
-            //If the date of this transaction is the same as the previous one added, "merge" them
-            } else if(formattedList.last().day.equals(transactions[i].day)
+            //If the date (or just month+year, if currentInterval == month) of this transaction
+            //is the same as the previous one added, "merge" them
+            } else if((formattedList.last().day.equals(transactions[i].day) || currentInterval == "Months")
                 && formattedList.last().month.equals(transactions[i].month)
                 && formattedList.last().year.equals(transactions[i].year)){
-                formattedList[formattedList.size - 1] = Transaction(null,formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
-                // ^Temporary horrible code line as I couldn't update just the amount
-                // It basically replaces the last transaction in the list with a new one with the amounts added together
+                formattedList = addValueToLastTransactionInList(formattedList, transactions[i].amount)
 
             //If the date differs from the previous one added, add as new entry
             } else{
@@ -201,27 +198,14 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         return formattedList
     }
 
-    //Adds all values for months together (only one line differs.. can these be combined?)
-    fun formatListForMonths(transactions : List<Transaction>) : MutableList<Transaction>{
-        val formattedList : MutableList<Transaction> = ArrayList()
-        //For every transaction in the transaction list
-        for (i in transactions.indices){
-            if (formattedList.isEmpty()){
-                formattedList.add(transactions[i]) //If this is the first call, just add it
-            //If the month+year of this transaction is the same as the previous one added, "merge" them
-            } else if(formattedList.last().month.equals(transactions[i].month)
-                && formattedList.last().year.equals(transactions[i].year)){
-                formattedList[formattedList.size - 1] = Transaction(null,formattedList.last().amount + transactions[i].amount,formattedList.last().category,formattedList.last().timeStamp,formattedList.last().year,formattedList.last().month,formattedList.last().day,formattedList.last().time,formattedList.last().note)
-                // ^Temporary horrible code line as I couldn't update just the amount
-                // It basically replaces the last transaction in the list with a new one with the amounts added together
-
-            //If the month+year differs from the previous one added, add as new entry
-            } else{
-                formattedList.add(transactions[i])
-            }
-        }
-        //Return the new list
-        return formattedList
+    //Adds the value "value" onto the last transaction in the list
+    //Used to "lump" days or months together for the graph
+    fun addValueToLastTransactionInList(transactions : MutableList<Transaction>, value : Long) : MutableList<Transaction>{
+        transactions[transactions.size - 1] = Transaction(null,
+            transactions.last().amount + value,transactions.last().category,
+            transactions.last().timeStamp,transactions.last().year,transactions.last().month,
+            transactions.last().day,transactions.last().time,transactions.last().note)
+        return transactions
     }
 
     //Show the date picker (mostly same as in overview)
@@ -286,8 +270,9 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
 
         val barData = BarData(dataSet)
 
-        barData.setBarWidth(0.6f)
-        barData.setDrawValues(true)
+        barData.setBarWidth(0.6f) //Set the spacing between bars (the actual width depends on zoom)
+        barData.setDrawValues(true) //Write values to the side of the graph
+        barData.setHighlightEnabled(false) //Disable changing color of a bar when touching it
 
         //This separate class-file is used to change the labels on top of bars.
         val formatter : GraphFormatter = GraphFormatter()
@@ -330,12 +315,8 @@ class RecentTransactions : AppCompatActivity(), AdapterView.OnItemSelectedListen
         val filteredTransactionList = DataHandler.filteredList(startDate,endDate,currentCat)
         //Add the days, or months, together
         val formattedTransactionList : List<Transaction>
-        if(currentInterval == "Days"){
-            formattedTransactionList = formatListForDays(filteredTransactionList.asReversed())
-        } else{
-            formattedTransactionList = formatListForMonths(filteredTransactionList.asReversed())
-        }
-        //Convert to separate lists
+        formattedTransactionList = formatListForDaysOrMonths(filteredTransactionList.asReversed())
+        //Convert to separate lists of values and strings, so that they can be fed to the graph
         val values : MutableList<Float> = ArrayList()
         val labels : MutableList<String> = ArrayList()
         for (i in formattedTransactionList.indices){
