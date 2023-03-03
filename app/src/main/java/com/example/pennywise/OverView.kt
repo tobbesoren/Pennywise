@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageButton
 import android.widget.TextView
 import com.example.pennywise.databinding.ActivityOverViewBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
@@ -39,7 +37,6 @@ class OverView : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
 
         categorySelected = getString(R.string.all)
 
@@ -90,16 +87,10 @@ class OverView : AppCompatActivity() {
         val intent = Intent(this, AddTransactionActivity::class.java)
         startActivity(intent)
     }
-    private fun goToOverViewActivity () {
-        val intent = Intent(this, OverView::class.java)
-        startActivity(intent)
-    }
     private fun goToRecentTransactionActivity () {
         val intent = Intent(this, RecentTransactions::class.java)
         startActivity(intent)
     }
-
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_pennywise, menu)
 //        menuInflater.inflate(R.menu.bottom_nav, menu2)
@@ -123,66 +114,27 @@ class OverView : AppCompatActivity() {
                 setMoneyText(DataHandler.listToBalance(filteredTransactions))
                 return true
             } R.id.amusementMenu -> {
-                expenseTextView.setText(R.string.amusement)
-                categorySelected = getString(R.string.amusement)
-                filteredTransactions = DataHandler.filteredList(startDate,
-                    endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(filteredTransactions))
-                return true
+                setExpensesByCategoryAndDate("Amusement")
             } R.id.householdMenu -> {
-                expenseTextView.setText(R.string.household)
-                categorySelected = getString(R.string.household)
-                filteredTransactions = DataHandler.filteredList(startDate,
-                    endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(filteredTransactions))
-                return true
+                setExpensesByCategoryAndDate("Household")
             } R.id.transportationMenu -> {
-                expenseTextView.setText(R.string.transportation)
-                categorySelected = getString(R.string.transportation)
-                filteredTransactions = DataHandler.filteredList(startDate,
-                    endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(filteredTransactions))
-                return true
+                setExpensesByCategoryAndDate("Transportation")
             } R.id.diningMenu -> {
-                expenseTextView.setText(R.string.dining)
-                categorySelected = getString(R.string.dining)
-                filteredTransactions = DataHandler.filteredList(startDate,
-                    endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(filteredTransactions))
-                return true
+                setExpensesByCategoryAndDate("Dining")
             } R.id.hcWellnMenu -> {
-                expenseTextView.setText(R.string.healthcare_wellness)
-                categorySelected = getString(R.string.healthcare_wellness)
-                filteredTransactions = DataHandler.filteredList(startDate,
-                    endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(filteredTransactions))
-                return true
+                setExpensesByCategoryAndDate("Healthcare / Wellness")
             } R.id.groceriesMenu -> {
-                expenseTextView.setText(R.string.groceries)
-                categorySelected = getString(R.string.groceries)
-                filteredTransactions = DataHandler.filteredList(startDate,
-                    endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(filteredTransactions))
-                return true
+                setExpensesByCategoryAndDate("Groceries")
             } R.id.otherMenu -> {
-                expenseTextView.setText(R.string.other)
-                categorySelected = getString(R.string.other)
-                filteredTransactions = DataHandler.filteredList(startDate,
-                    endDate, categorySelected)
-                setMoneyText(DataHandler.listToBalance(filteredTransactions))
-                return true
+                setExpensesByCategoryAndDate("Other")
             } else -> super.onOptionsItemSelected(item)
-
-
         }
     }
-
     private fun signOut() {
         Firebase.auth.signOut()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
-
     /**
      * Updates ExpensePresentView on resuming
      */
@@ -191,7 +143,14 @@ class OverView : AppCompatActivity() {
         loadDataUpdateMoneyText(uid)
     }
 
-
+    private fun setExpensesByCategoryAndDate(category: String) : Boolean {
+        expenseTextView.text = category
+        categorySelected = category
+        filteredTransactions = DataHandler.filteredList(startDate,
+            endDate, categorySelected)
+        setMoneyText(DataHandler.listToBalance(filteredTransactions))
+        return true
+    }
     /**
      * This is called onCreate and onResume.
      *Loads data from Firestore. Calls DataHandler.updateList to make the allTransactions list.
@@ -201,8 +160,7 @@ class OverView : AppCompatActivity() {
      * filteredTransactions. Yeah, it's a mouthful.
      */
     private fun loadDataUpdateMoneyText(userID: String) {
-        Firebase.firestore.collection("users/${userID}/transactions")
-            .get()
+        Firebase.firestore.collection("users/${userID}/transactions").get()
             .addOnSuccessListener { documentSnapShot ->
                 DataHandler.updateList(documentSnapShot)
                 filteredTransactions = DataHandler.filteredList(
@@ -215,8 +173,6 @@ class OverView : AppCompatActivity() {
                 Log.d("!!!!", exception.toString())
             }
     }
-
-
     /**
      * This sets the expensePresentView with the current sum of the given Balance.
      */
@@ -224,7 +180,6 @@ class OverView : AppCompatActivity() {
         expensePresentView.text = amount.balanceString(this)
         DataHandler.logData()
     }
-
     private fun showDateRangePicker() {
 
         val dateRangePicker = MaterialDatePicker.Builder
@@ -236,7 +191,6 @@ class OverView : AppCompatActivity() {
             supportFragmentManager,
             "date_range_picker"
         )
-
         dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
 
             startDate = convertLongToDate(datePicked.first)
@@ -250,7 +204,6 @@ class OverView : AppCompatActivity() {
             setMoneyText(currentBalance)
         }
     }
-
     private fun convertLongToDate(time:Long):String {
 
         val date = java.util.Date(time)
@@ -261,5 +214,4 @@ class OverView : AppCompatActivity() {
 
         return format.format(date)
     }
-
 }
